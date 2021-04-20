@@ -1,0 +1,37 @@
+rescript = 1
+rule cp
+  command = cp $i $out
+rule touch
+ command = touch $out
+o Index-MyReactApp.cmi : cp ../bs/src/Index-MyReactApp.cmi
+o Index-MyReactApp.cmj : cp ../bs/src/Index-MyReactApp.cmj
+o Index-MyReactApp.cmt : cp ../bs/src/Index-MyReactApp.cmt
+o Index.re : cp ../../src/Index.re
+o ExampleStyles-MyReactApp.cmi : cp ../bs/src/ExampleStyles-MyReactApp.cmi
+o ExampleStyles-MyReactApp.cmj : cp ../bs/src/ExampleStyles-MyReactApp.cmj
+o ExampleStyles-MyReactApp.cmt : cp ../bs/src/ExampleStyles-MyReactApp.cmt
+o ExampleStyles.re : cp ../../src/ExampleStyles.re
+o ReducerFromReactJSDocs-MyReactApp.cmi : cp ../bs/src/ReducerFromReactJSDocs/ReducerFromReactJSDocs-MyReactApp.cmi
+o ReducerFromReactJSDocs-MyReactApp.cmj : cp ../bs/src/ReducerFromReactJSDocs/ReducerFromReactJSDocs-MyReactApp.cmj
+o ReducerFromReactJSDocs-MyReactApp.cmt : cp ../bs/src/ReducerFromReactJSDocs/ReducerFromReactJSDocs-MyReactApp.cmt
+o ReducerFromReactJSDocs.re : cp ../../src/ReducerFromReactJSDocs/ReducerFromReactJSDocs.re
+o ReasonReactCard-MyReactApp.cmi : cp ../bs/src/ReasonUsingJSUsingReason/ReasonReactCard-MyReactApp.cmi
+o ReasonReactCard-MyReactApp.cmj : cp ../bs/src/ReasonUsingJSUsingReason/ReasonReactCard-MyReactApp.cmj
+o ReasonReactCard-MyReactApp.cmt : cp ../bs/src/ReasonUsingJSUsingReason/ReasonReactCard-MyReactApp.cmt
+o ReasonReactCard.re : cp ../../src/ReasonUsingJSUsingReason/ReasonReactCard.re
+o ReasonUsingJSUsingReason-MyReactApp.cmi : cp ../bs/src/ReasonUsingJSUsingReason/ReasonUsingJSUsingReason-MyReactApp.cmi
+o ReasonUsingJSUsingReason-MyReactApp.cmj : cp ../bs/src/ReasonUsingJSUsingReason/ReasonUsingJSUsingReason-MyReactApp.cmj
+o ReasonUsingJSUsingReason-MyReactApp.cmt : cp ../bs/src/ReasonUsingJSUsingReason/ReasonUsingJSUsingReason-MyReactApp.cmt
+o ReasonUsingJSUsingReason.re : cp ../../src/ReasonUsingJSUsingReason/ReasonUsingJSUsingReason.re
+o BlinkingGreeting-MyReactApp.cmi : cp ../bs/src/BlinkingGreeting/BlinkingGreeting-MyReactApp.cmi
+o BlinkingGreeting-MyReactApp.cmj : cp ../bs/src/BlinkingGreeting/BlinkingGreeting-MyReactApp.cmj
+o BlinkingGreeting-MyReactApp.cmt : cp ../bs/src/BlinkingGreeting/BlinkingGreeting-MyReactApp.cmt
+o BlinkingGreeting.re : cp ../../src/BlinkingGreeting/BlinkingGreeting.re
+o FetchedDogPictures-MyReactApp.cmi : cp ../bs/src/FetchedDogPictures/FetchedDogPictures-MyReactApp.cmi
+o FetchedDogPictures-MyReactApp.cmj : cp ../bs/src/FetchedDogPictures/FetchedDogPictures-MyReactApp.cmj
+o FetchedDogPictures-MyReactApp.cmt : cp ../bs/src/FetchedDogPictures/FetchedDogPictures-MyReactApp.cmt
+o FetchedDogPictures.re : cp ../../src/FetchedDogPictures/FetchedDogPictures.re
+o MyReactApp.cmi : cp ../bs/MyReactApp.cmi
+o MyReactApp.cmj : cp ../bs/MyReactApp.cmj
+o MyReactApp.cmt : cp ../bs/MyReactApp.cmt
+build install.stamp : touch Index-MyReactApp.cmi Index-MyReactApp.cmj ExampleStyles-MyReactApp.cmi ExampleStyles-MyReactApp.cmj ReducerFromReactJSDocs-MyReactApp.cmi ReducerFromReactJSDocs-MyReactApp.cmj ReasonReactCard-MyReactApp.cmi ReasonReactCard-MyReactApp.cmj ReasonUsingJSUsingReason-MyReactApp.cmi ReasonUsingJSUsingReason-MyReactApp.cmj BlinkingGreeting-MyReactApp.cmi BlinkingGreeting-MyReactApp.cmj FetchedDogPictures-MyReactApp.cmi FetchedDogPictures-MyReactApp.cmj MyReactApp.cmi MyReactApp.cmj

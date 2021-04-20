@@ -1,0 +1,1 @@
+{ "dirs" : [ "src" , "src/ReducerFromReactJSDocs" , "src/ReasonUsingJSUsingReason" , "src/BlinkingGreeting" , "src/FetchedDogPictures" ] , "pkgs" : [ [ "reason-react" , "/home/xadet/projects/dungeon-generator/node_modules/reason-react" ] ] , "generated" : [] }
