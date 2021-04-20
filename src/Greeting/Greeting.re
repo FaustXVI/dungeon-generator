@@ -1,3 +1,3 @@
 [@react.component]
 let make = (~name) =>
-  <button> {ReasonReact.string("Greetings " ++ name ++ "!")} </button>;
+  <p> {ReasonReact.string("Greetings " ++ name ++ "!")} </p>;
