@@ -1,6 +1,8 @@
+open Belt;
 open Jest;
 open ReactTestUtils;
 open Expect;
+open Webapi;
 
 describe("My basic test", () => {
   // Here, we prepare an empty ref that will eventually be
@@ -18,31 +20,15 @@ describe("My basic test", () => {
 
     // Most of the ReactTestUtils API is there
     act(() => {
-      ReactDOMRe.render(<div> "Hello world!"->React.string </div>, container)
+      ReactDOMRe.render(<div> <Greeting name="Commander" /> </div>, container)
     });
 
     expect(
-      container
-      // We also provide some basic DOM querying utilities
-      // to ease your tests
-      ->DOM.findBySelectorAndTextContent("div", "Hello world!")
-      ->Js_option.isSome,
+      Option.map(
+        container->DOM.findBySelector("div"),
+        Dom.Element.textContent,
+      ),
     )
-    |> toBe(true);
+    |> toBe(Some("Greetings Commander!"));
   });
 });
-//
-//describe("Expect", () => {
-//  Expect.(test("toBe", () =>
-//            expect(1 + 2) |> toBe(3)
-//          ))
-//});
-//
-//describe("Expect.Operators", () => {
-//  open Expect;
-//  open! Expect.Operators;
-//
-//  test("==", () =>
-//    expect(1 + 2) === 3
-//  );
-//});
