@@ -5,30 +5,21 @@
 // We're using raw DOM manipulations here, to avoid making you read
 // ReasonReact when you might precisely be trying to learn it for the first
 // time through the examples later.
-let style = document##createElement("style");
-document##head##appendChild(style);
-style##innerHTML #= ExampleStyles.style;
+//let style = document##createElement("style");
+//document##head##appendChild(style);
+//style##innerHTML #= ExampleStyles.style;
 
-let makeContainer = text => {
+let makeContainer = () => {
   let container = document##createElement("div");
   container##className #= "container";
 
-  let title = document##createElement("div");
-  title##className #= "containerTitle";
-  title##innerText #= text;
-
-  let content = document##createElement("div");
-  content##className #= "containerContent";
-
-  let () = container##appendChild(title);
-  let () = container##appendChild(content);
   let () = document##body##appendChild(container);
 
-  content;
+  container;
 };
 
 // All 4 examples.
-ReactDOMRe.render(<Greeting name="Commander" />, makeContainer("Greeting"));
+ReactDOMRe.render(<Greeting name="Commander" />, makeContainer());
 //ReactDOMRe.render(
 //  <BlinkingGreeting> {React.string("Plop!")} </BlinkingGreeting>,
 //  makeContainer("Blinking Greeting"),
