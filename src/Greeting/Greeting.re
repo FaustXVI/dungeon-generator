@@ -1,11 +1,21 @@
-let generateDungeon = randomInt =>
-  if (randomInt(2) == 0) {
-    (-1);
-  } else {
-    1;
+type dungeon =
+  | Square
+  | Rectangle;
+
+let dungeonToString = (~dungeon: dungeon): string =>
+  switch (dungeon) {
+  | Square => "Square"
+  | Rectangle => "Rectangle"
   };
 
-type state = {generatedMap: option(int)};
+let generateDungeon = randomInt =>
+  if (randomInt(2) == 0) {
+    Square;
+  } else {
+    Rectangle;
+  };
+
+type state = {generatedMap: option(dungeon)};
 
 type action =
   | Generate;
@@ -29,7 +39,8 @@ let make = (~randomInt=Random.int) => {
       </button>
     </div>
     {switch (state) {
-     | {generatedMap: Some(i)} => <p> {React.string(string_of_int(i))} </p>
+     | {generatedMap: Some(dungeon)} =>
+       <p> {React.string(dungeonToString(~dungeon))} </p>
      | _ => React.null
      }}
   </div>;
