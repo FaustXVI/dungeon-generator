@@ -1,17 +1,31 @@
 open Jest;
-open Expect;
-open ReactTestingLibrary;
-open Webapi;
+open ReactTestUtils;
 
 describe("My basic test", () => {
+  let container = ref(None);
+
+  beforeEach(prepareContainer(container));
+  afterEach(cleanupContainer(container));
+
   test("can render DOM elements", () => {
-    <TestWrapper testId="greet">
-      <Greeting randomInt={_ => 10} />
-    </TestWrapper>
-    |> render
-    |> getByTestId(~matcher=`Str("greet"))
-    |> Dom.Element.textContent
-    |> expect
-    |> toBe("Greetings Commander!")
-  })
+    let container = getContainer(container);
+    act(() => {
+      ReactDOMRe.render(<Greeting randomInt={_ => 10} />, container)
+    });
+    let button =
+      DOM.findBySelector(container, "[data-testid='refresh_button']");
+    switch (button) {
+    | None => ()
+    | Some(button) => Simulate.click(button)
+    };
+    let content =
+      DOM.findBySelector(container, "[data-testid='dungeon']")
+      ->Js.Nullable.fromOption
+      ->Js.Nullable.toOption;
+
+    switch (content) {
+    | None => fail("dungeon should be defined")
+    | Some(_) => pass
+    };
+  });
 });

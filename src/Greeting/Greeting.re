@@ -34,13 +34,15 @@ let make = (~randomInt=Random.int) => {
     React.useReducer(reducer(randomInt), initialState);
   <div>
     <div>
-      <button onClick={_event => dispatch(Generate)}>
-        {React.string("Refresh")}
-      </button>
+      {<button onClick={_event => dispatch(Generate)}>
+         {React.string("Refresh")}
+       </button>
+       |> TestWrapper.testId("refresh_button")}
     </div>
     {switch (state) {
      | {generatedMap: Some(dungeon)} =>
        <p> {React.string(dungeonToString(~dungeon))} </p>
+       |> TestWrapper.testId("dungeon")
      | _ => React.null
      }}
   </div>;
