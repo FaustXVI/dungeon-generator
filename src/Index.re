@@ -19,7 +19,7 @@ let makeContainer = () => {
 };
 
 // All 4 examples.
-ReactDOMRe.render(<Greeting name="Commander" />, makeContainer());
+ReactDOMRe.render(<Greeting />, makeContainer());
 //ReactDOMRe.render(
 //  <BlinkingGreeting> {React.string("Plop!")} </BlinkingGreeting>,
 //  makeContainer("Blinking Greeting"),
