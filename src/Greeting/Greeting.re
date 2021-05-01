@@ -1,3 +1,10 @@
+let generateDungeon = randomInt =>
+  if (randomInt(2) == 0) {
+    (-1);
+  } else {
+    1;
+  };
+
 type state = {generatedMap: option(int)};
 
 type action =
@@ -7,7 +14,7 @@ let initialState = {generatedMap: None};
 
 let reducer = (randomInt, _, action) => {
   switch (action) {
-  | Generate => {generatedMap: Some(randomInt(10))}
+  | Generate => {generatedMap: Some(generateDungeon(randomInt))}
   };
 };
 
@@ -15,17 +22,15 @@ let reducer = (randomInt, _, action) => {
 let make = (~randomInt=Random.int) => {
   let (state, dispatch) =
     React.useReducer(reducer(randomInt), initialState);
-  let print =
-    switch (state) {
-    | {generatedMap: Some(i)} => string_of_int(i)
-    | _ => ""
-    };
   <div>
     <div>
       <button onClick={_event => dispatch(Generate)}>
         {React.string("Refresh")}
       </button>
     </div>
-    <p> {React.string(print)} </p>
+    {switch (state) {
+     | {generatedMap: Some(i)} => <p> {React.string(string_of_int(i))} </p>
+     | _ => React.null
+     }}
   </div>;
 };
