@@ -1,34 +1,22 @@
 open DungeonGenerator;
 
-type state = {generatedMap: option(dungeon)};
+type state = {generatedMap: string};
 
 type action =
   | Generate;
 
-let initialState = {generatedMap: None};
+let initialState = {generatedMap: generateEncounter() };
 
-let reducer = (randomInt, _, action) => {
-  switch (action) {
-  | Generate => {generatedMap: Some(generateDungeon(randomInt))}
-  };
+let reducer = (_, s, _) => {
+    s
 };
 
 [@react.component]
 let make = (~randomInt=Random.int) => {
-  let (state, dispatch) =
+  let (state, _) =
     React.useReducer(reducer(randomInt), initialState);
   <div>
-    <div>
-      {<button onClick={_event => dispatch(Generate)}>
-         {React.string("Refresh")}
-       </button>
-       |> TestId.testId("refresh_button")}
-    </div>
-    {switch (state) {
-     | {generatedMap: Some(dungeon)} =>
-       <p> {React.string(dungeonToString(~dungeon))} </p>
-       |> TestId.testId("dungeon")
-     | _ => React.null
-     }}
+       { <p> {React.string(state.generatedMap)} </p>
+       |> TestId.testId("dungeon") }
   </div>;
 };
