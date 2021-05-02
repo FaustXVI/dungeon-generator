@@ -37,12 +37,12 @@ let make = (~randomInt=Random.int) => {
       {<button onClick={_event => dispatch(Generate)}>
          {React.string("Refresh")}
        </button>
-       |> TestWrapper.testId("refresh_button")}
+       |> TestId.testId("refresh_button")}
     </div>
     {switch (state) {
      | {generatedMap: Some(dungeon)} =>
        <p> {React.string(dungeonToString(~dungeon))} </p>
-       |> TestWrapper.testId("dungeon")
+       |> TestId.testId("dungeon")
      | _ => React.null
      }}
   </div>;
