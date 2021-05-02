@@ -1,1 +1,7 @@
-let generateEncounter= () => "2 creatures at Group Level"
+type encounter = { creaturesAtGroupLevel : int }
+
+let generateEncounter= () => { creaturesAtGroupLevel : 2 }
+
+
+
+
