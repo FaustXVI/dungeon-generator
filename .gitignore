@@ -5,3 +5,4 @@ nohup.out
 lib
 .merlin
 *.lock
+bundleOutput

@@ -18,7 +18,9 @@
   "dependencies": {
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "reason-react": ">=0.7.1"
+    "reason-react": ">=0.7.1",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.7.0",
