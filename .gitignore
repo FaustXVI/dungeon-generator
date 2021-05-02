@@ -6,3 +6,4 @@ lib
 .merlin
 *.lock
 bundleOutput
+js
