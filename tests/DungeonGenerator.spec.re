@@ -11,7 +11,10 @@ describe("My basic test", () => {
   test("can render DOM elements", () => {
     let container = getContainer(refContainer);
     act(() => {
-      ReactDOMRe.render(<Greeting randomInt={_ => 10} />, container)
+      ReactDOMRe.render(
+        <DungeonGeneratorGui randomInt={_ => 10} />,
+        container,
+      )
     });
     let button = querySelector(container, "[data-testid='refresh_button']");
     switch (button) {
