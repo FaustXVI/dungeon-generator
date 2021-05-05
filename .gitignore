@@ -7,3 +7,5 @@ lib
 *.lock
 bundleOutput
 js
+\.*
+result

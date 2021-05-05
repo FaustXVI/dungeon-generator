@@ -1,19 +1,31 @@
 with import ./nix/channel.nix;
 let
   dependencies = import ./nix/dependencies.nix;
-  nodeModules = stdenv.mkDerivation {
-    name = "dungeon-generator-node-modules";
-    buildInputs = dependencies.devTools;
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "1m0h4km3bbj31dcwns0ir0773vdva45rry4b9lhacjyxr3k5h67z";
-    src = nix-gitignore.gitignoreSource [] ./. ;
-    installPhase = ''
-      export HOME=$(mktemp -d)
-      mkdir $out
-      npm ci
-      mv node_modules $out
-    '';
-  };
+  nodeDependencies = (pkgs.callPackage ./nix/composition.nix {inherit pkgs system nodejs;}).package;
+  #{
+
+  #      # Fix paths so we can use a cached Ninja, instead of compiling it
+  #      preInstall = ''
+  #        echo prebuild
+  #        pwd
+  #        sed -i 's:./configure.py --bootstrap:python3 ./configure.py --bootstrap:' ./scripts/install.js
+  #        fail
+  #      '';
+
+  #  };
+    nodeModules = stdenv.mkDerivation {
+      name = "dungeon-generator";
+      buildInputs = dependencies.devTools;
+      src = nix-gitignore.gitignoreSource [] ./. ;
+      installPhase = ''
+        ln -s ${nodeDependencies}/lib/node_modules ./node_modules
+        export PATH="${nodeDependencies}/bin:$PATH"
+        echo "${nodeDependencies}"
+        export HOME=$(mktemp -d)
+        mkdir $out
+        npm run build
+        cp -r indexProduction.html js $out
+      '';
+    };
 in nodeModules
 
