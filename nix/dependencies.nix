@@ -13,6 +13,7 @@ let
       git
       nixops
       nodejs
+      nodePackages.node2nix
     ];
     runtime = [
       nodejs
