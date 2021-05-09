@@ -17,7 +17,7 @@ let make = (~randomInt=Random.int) => {
   <div>
     {<p>
        {React.string(
-          string_of_int(state.generatedAdventure.creaturesAtGroupLevel)
+          string_of_int(Belt.List.length(state.generatedAdventure.perils))
           ++ " creatures at Group Level",
         )}
      </p>

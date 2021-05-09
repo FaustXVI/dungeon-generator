@@ -1,6 +1,8 @@
-type encounter = { creaturesAtGroupLevel : int }
+type peril = Creature | SimpleDanger | ComplexDanger
 
-let generateEncounter= () => { creaturesAtGroupLevel : 2 }
+type encounter = { perils :  list (peril) }
+
+let generateEncounter= () => { perils : [Creature,Creature] }
 
 
 
