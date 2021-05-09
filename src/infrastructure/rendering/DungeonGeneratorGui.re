@@ -5,7 +5,7 @@ type state = {generatedAdventure: encounter};
 type action =
   | Generate;
 
-let initialState = {generatedAdventure: generateEncounter(~perils=[|Creature|])};
+let initialState = {generatedAdventure: generateEncounter(~perils=[|Creature|],())};
 
 let reducer = (_, s, _) => {
   s;
