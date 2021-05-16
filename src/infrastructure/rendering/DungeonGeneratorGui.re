@@ -5,7 +5,10 @@ type state = {generatedAdventure: encounter};
 type action =
   | Generate;
 
-let initialState = {generatedAdventure: generateEncounter(~perils=[|Creature|],())};
+let initialState = {
+  generatedAdventure:
+    generateEncounter(~perils=[|Creature, SimpleDanger|], ()),
+};
 
 let reducer = (_, s, _) => {
   s;
@@ -16,10 +19,14 @@ let make = (~randomInt=Random.int) => {
   let (state, _) = React.useReducer(reducer(randomInt), initialState);
   <div>
     {<p>
-       {React.string(
-          string_of_int(Belt.List.length(state.generatedAdventure.perils))
-          ++ " creatures at Group Level",
-        )}
+       {let strings =
+          Belt.List.map(state.generatedAdventure.perils, p => {
+            switch (p) {
+            | Creature => "Creature"
+            | SimpleDanger => "Simple Danger"
+            }
+          });
+        React.string(Js.Array.joinWith(", ", Belt.List.toArray(strings)))}
      </p>
      ->TestId.testId(~testId="dungeon")}
   </div>;
