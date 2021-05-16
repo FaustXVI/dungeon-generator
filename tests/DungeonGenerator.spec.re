@@ -45,6 +45,12 @@ describe("Encounter Generator", () => {
         |> toEqual(40)
       });
       test(
+        "experience points of an encounter with 1 complex danger only is 40 points",
+        () => {
+        expect(experiencePoints(~encounter={perils: [ComplexDanger]}))
+        |> toEqual(40)
+      });
+      test(
         "experience points of an encounter with 1 simple danger  only is 8 points",
         () => {
         expect(experiencePoints(~encounter={perils: [SimpleDanger]}))

@@ -7,7 +7,7 @@ type action =
 
 let initialState = {
   generatedAdventure:
-    generateEncounter(~perils=[|Creature, SimpleDanger|], ()),
+    generateEncounter(~perils=[|Creature, SimpleDanger, ComplexDanger|], ()),
 };
 
 let reducer = (_, s, _) => {
@@ -24,6 +24,7 @@ let make = (~randomInt=Random.int) => {
             switch (p) {
             | Creature => "Creature"
             | SimpleDanger => "Simple Danger"
+            | ComplexDanger => "Complex Danger"
             }
           });
         React.string(Js.Array.joinWith(", ", Belt.List.toArray(strings)))}

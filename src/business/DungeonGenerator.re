@@ -2,7 +2,8 @@ open Belt.List;
 
 type peril =
   | Creature
-  | SimpleDanger;
+  | SimpleDanger
+  | ComplexDanger;
 
 type encounter = {perils: list(peril)};
 
@@ -13,7 +14,8 @@ let pickRandom = (perils: list(peril)) => Belt.List.head(shuffle(perils));
 let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
   | SimpleDanger => 8
-  | Creature => 40
+  | Creature
+  | ComplexDanger => 40
   };
 };
 let experiencePoints = (~encounter: encounter) => {
