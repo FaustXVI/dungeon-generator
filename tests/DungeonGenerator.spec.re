@@ -10,19 +10,34 @@ module EncounterComparator =
 
 describe("Encounter Generator", () => {
         describe("unit tests", () => {
-                test("can generate a moderate encounter with creatures only", () => {
-                        expect(generateEncounter(~perils=[|Creature|], ()))
-                        |> toEqual({ perils : [Creature, Creature] })
+                describe("generate encounter", () => {
+                        test("can generate a moderate encounter with creatures only", () => {
+                                expect(generateEncounter(~perils=[|Creature|], ()))
+                                |> toEqual({ perils : [Creature, Creature] })
+                                });
+
+                        test("can generate a moderate encounter with creatures and dangers chosen via specific criteria", () => {
+                                let pickFirst = (alist => Belt.List.head(alist));
+                                let tenSimpleDangers = Belt.List.map([1,2,3,4,5,6,7,8,9,10], _ => SimpleDanger);
+                                let expected = { perils : tenSimpleDangers };
+                                expect(generateEncounter(~perils=[|SimpleDanger,Creature|],~chooser = pickFirst,()))
+                                |> toEqual(expected);
+                                });
                         });
-                test("experience points of an encounter with 1 creature only is 40 points", () => {
-                        expect(experiencePoints(~encounter={ perils: [Creature] }))
-                        |> toEqual (40);
+                describe("experience points", () => {
+                        test("experience points of an encounter with 1 creature only is 40 points", () => {
+                                expect(experiencePoints(~encounter={ perils: [Creature] }))
+                                |> toEqual (40);
+                                });
+                        test("experience points of an encounter with 1 simple danger  only is 8 points", () => {
+                                expect(experiencePoints(~encounter={ perils: [SimpleDanger] }))
+                                |> toEqual (8);
+                                });
+                        test("experience points of an encounter with 1 simple danger and 1 creature is 48 points", () => {
+                                expect(experiencePoints(~encounter={ perils: [SimpleDanger, Creature] }))
+                                |> toEqual (48);
+                                });
                         });
-                test("can generate a moderate encounter with creatures and dangers chosen via specific criteria", () => {
-                        let pickFirst = (alist => Belt.List.head(alist));
-                        expect(generateEncounter(~perils=[|SimpleDanger,Creature|],~choose = pickFirst,()))
-                        |> toEqual({ perils : Belt.List.map([1,2,3,4,5,6,7,8,9,10], _ => SimpleDanger)});
-                });
         });
 
         describe("acceptance tests", () => {
@@ -30,7 +45,7 @@ describe("Encounter Generator", () => {
                         expect(experiencePoints(~encounter=generateEncounter(~perils=[|Creature, SimpleDanger|],())))
                         |> toEqual(80);
                         });
-                test("two moderate encounters are potentially distinct", () => {
+                Skip.test("two moderate encounters are potentially distinct", () => {
                         // generate a dozen of encouters (with a fixed seed)
                         let encounters = [|1,2,3,4,5,6,7,8,9,10|]
                             -> Belt.Array.map(_ => generateEncounter(~perils=[|Creature,SimpleDanger|],()));
