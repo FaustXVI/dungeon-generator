@@ -35,8 +35,8 @@
     "bs-react-testing-library"
   ],
   "warnings": {
-    "number": "+A-42-48-20",
-    "error": "+A-3-4-44-102-103"
+    "number": "+A-42-6-48-20",
+    "error": "+A-3-4-6-44-102-103"
   },
   "refmt": 3
 }

@@ -9,7 +9,7 @@ type encounter = {perils: list(peril)};
 
 type chooser = list(peril) => option(peril);
 
-let pickRandom = (perils: list(peril)) => Belt.List.head(shuffle(perils));
+let pickRandom = (perils: list(peril)) => head(shuffle(perils));
 
 let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
