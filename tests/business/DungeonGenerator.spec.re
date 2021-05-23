@@ -16,7 +16,7 @@ describe("Encounter Generator", () => {
   describe("unit tests", () => {
     describe("generate encounter", () => {
       test("can generate a moderate encounter with creatures only", () => {
-        expect(generateEncounter(~perils=[|Creature|], ()))
+        expect(generateEncounter(~perils=[|Creature|], ~chooser=pickRandom))
         |> toEqual({perils: [(Creature, 2)]})
       });
 
@@ -30,7 +30,6 @@ describe("Encounter Generator", () => {
             generateEncounter(
               ~perils=[|SimpleDanger, Creature|],
               ~chooser=pickFirst,
-              (),
             ),
           )
           |> toEqual(expected);
@@ -76,7 +75,10 @@ describe("Encounter Generator", () => {
     test("moderate encounter represents 80 experience points", () => {
       expect(
         experiencePoints(
-          generateEncounter(~perils=[|Creature, SimpleDanger|], ()),
+          generateEncounter(
+            ~perils=[|Creature, SimpleDanger|],
+            ~chooser=pickRandom,
+          ),
         ),
       )
       |> toEqual(80)
@@ -86,7 +88,10 @@ describe("Encounter Generator", () => {
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Belt.Array.map(_ =>
-            generateEncounter(~perils=[|Creature, SimpleDanger|], ())
+            generateEncounter(
+              ~perils=[|Creature, SimpleDanger|],
+              ~chooser=pickRandom,
+            )
           );
       let set =
         Belt.Set.fromArray(encounters, ~id=(module EncounterComparator));

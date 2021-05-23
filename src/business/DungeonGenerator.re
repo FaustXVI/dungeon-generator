@@ -65,8 +65,7 @@ let rec addPeril =
     building;
   };
 
-let generateEncounter =
-    (~perils: array(peril), ~chooser: chooser=pickRandom, ()): encounter => {
+let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter => {
   let perils =
     addPeril(
       chooser,
