@@ -1,9 +1,16 @@
 open Belt.List;
+open Belt;
 
 type peril =
   | Creature
   | SimpleDanger
   | ComplexDanger;
+
+module PerilComparator =
+  Id.MakeComparable({
+    type t = peril;
+    let cmp = (a: peril, b: peril) => compare(a, b);
+  });
 
 type encounter = {perils: list((peril, int))};
 
@@ -23,52 +30,49 @@ let experiencePoints = (~encounter: encounter) => {
   ->reduce(0, (a, b) => a + b);
 };
 
+exception Peril_Not_Found;
+
+let increment = (value: option(int)): option(int) =>
+  switch (value) {
+  | None => Some(1)
+  | Some(n) => Some(n + 1)
+  };
+
+let upToGoal = (perils: list(peril), goal: int): list(peril) => {
+  keep(perils, p => experiencePointForPeril(p) <= goal);
+};
+
 let rec addPeril =
         (
           chooser: chooser,
           perils: list(peril),
-          building: list(peril),
+          building: Map.t(peril, int, PerilComparator.identity),
           goal: int,
         )
-        : list(peril) =>
-  if (0 == goal) {
-    building;
-  } else {
-    let element =
-      chooser(keep(perils, p => experiencePointForPeril(p) <= goal));
-    switch (element) {
-    | None => []
+        : Map.t(peril, int, PerilComparator.identity) =>
+  if (goal > 0) {
+    switch (chooser(perils->upToGoal(goal))) {
+    | None => raise(Peril_Not_Found)
     | Some(peril) =>
-      let newBuilding = building->add(peril);
       addPeril(
         chooser,
         perils,
-        newBuilding,
+        building->Map.update(peril, increment),
         goal - experiencePointForPeril(peril),
-      );
+      )
     };
+  } else {
+    building;
   };
-
-module PerilComparator =
-  Belt.Id.MakeComparable({
-    type t = peril;
-    let cmp = (a: peril, b: peril) => compare(a, b);
-  });
 
 let generateEncounter =
     (~perils: array(peril), ~chooser: chooser=pickRandom, ()): encounter => {
-  let m: Belt.Map.t(peril, int, PerilComparator.identity) =
-    Belt.Map.make(~id=(module PerilComparator));
   let perils =
-    addPeril(chooser, fromArray(perils), [], 80)
-    ->map(p => (p, 1))
-    ->reduce(m, (acc, (p, n)) =>
-        acc->Belt.Map.update(p, v => {
-          switch (v) {
-          | None => Some(1)
-          | Some(x) => Some(x + n)
-          }
-        })
-      );
-  {perils: Belt.Map.toList(perils)};
+    addPeril(
+      chooser,
+      fromArray(perils),
+      Map.make(~id=(module PerilComparator)),
+      80,
+    );
+  {perils: Map.toList(perils)};
 };
