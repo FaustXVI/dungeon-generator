@@ -6,7 +6,8 @@ module EncounterComparator =
   Belt.Id.MakeComparable({
     type t = encounter;
     let cmp = (a, b) =>
-      Belt.List.cmp(a.perils, b.perils, (elem1, elem2) =>
+      Belt.List.cmp(
+        a.perils, b.perils, ((elem1: peril, _), (elem2: peril, _)) =>
         compare(elem1, elem2)
       );
   });
@@ -16,15 +17,14 @@ describe("Encounter Generator", () => {
     describe("generate encounter", () => {
       test("can generate a moderate encounter with creatures only", () => {
         expect(generateEncounter(~perils=[|Creature|], ()))
-        |> toEqual({perils: [Creature, Creature]})
+        |> toEqual({perils: [(Creature, 2)]})
       });
 
       test(
         "can generate a moderate encounter with creatures and dangers chosen via specific criteria",
         () => {
           let pickFirst = alist => Belt.List.head(alist);
-          let tenSimpleDangers =
-            Belt.List.map([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], _ => SimpleDanger);
+          let tenSimpleDangers = [(SimpleDanger, 10)];
           let expected = {perils: tenSimpleDangers};
           expect(
             generateEncounter(
@@ -41,22 +41,32 @@ describe("Encounter Generator", () => {
       test(
         "experience points of an encounter with 1 creature only is 40 points",
         () => {
-        expect(experiencePoints({perils: [Creature]})) |> toEqual(40)
+        expect(experiencePoints({perils: [(Creature, 1)]})) |> toEqual(40)
       });
       test(
         "experience points of an encounter with 1 complex danger only is 40 points",
         () => {
-        expect(experiencePoints({perils: [ComplexDanger]})) |> toEqual(40)
+        expect(experiencePoints({perils: [(ComplexDanger, 1)]}))
+        |> toEqual(40)
       });
       test(
         "experience points of an encounter with 1 simple danger  only is 8 points",
         () => {
-        expect(experiencePoints({perils: [SimpleDanger]})) |> toEqual(8)
+        expect(experiencePoints({perils: [(SimpleDanger, 1)]}))
+        |> toEqual(8)
+      });
+      test(
+        "experience points of an encounter with 2 simple danger only is 16 points",
+        () => {
+        expect(experiencePoints({perils: [(SimpleDanger, 2)]}))
+        |> toEqual(16)
       });
       test(
         "experience points of an encounter with 1 simple danger and 1 creature is 48 points",
         () => {
-        expect(experiencePoints({perils: [SimpleDanger, Creature]}))
+        expect(
+          experiencePoints({perils: [(SimpleDanger, 1), (Creature, 1)]}),
+        )
         |> toEqual(48)
       });
     });

@@ -5,7 +5,7 @@ type peril =
   | SimpleDanger
   | ComplexDanger;
 
-type encounter = {perils: list(peril)};
+type encounter = {perils: list((peril, int))};
 
 type chooser = list(peril) => option(peril);
 
@@ -19,7 +19,8 @@ let experiencePointForPeril = (peril: peril) => {
   };
 };
 let experiencePoints = (~encounter: encounter) => {
-  map(encounter.perils, experiencePointForPeril)->reduce(0, (a, b) => a + b);
+  map(encounter.perils, ((p, n)) => n * experiencePointForPeril(p))
+  ->reduce(0, (a, b) => a + b);
 };
 
 let rec addPeril =
@@ -48,8 +49,26 @@ let rec addPeril =
     };
   };
 
+module PerilComparator =
+  Belt.Id.MakeComparable({
+    type t = peril;
+    let cmp = (a: peril, b: peril) => compare(a, b);
+  });
+
 let generateEncounter =
     (~perils: array(peril), ~chooser: chooser=pickRandom, ()): encounter => {
-  let perils = addPeril(chooser, fromArray(perils), [], 80);
-  {perils: perils};
+  let m: Belt.Map.t(peril, int, PerilComparator.identity) =
+    Belt.Map.make(~id=(module PerilComparator));
+  let perils =
+    addPeril(chooser, fromArray(perils), [], 80)
+    ->map(p => (p, 1))
+    ->reduce(m, (acc, (p, n)) =>
+        acc->Belt.Map.update(p, v => {
+          switch (v) {
+          | None => Some(1)
+          | Some(x) => Some(x + n)
+          }
+        })
+      );
+  {perils: Belt.Map.toList(perils)};
 };

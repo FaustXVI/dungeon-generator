@@ -20,9 +20,8 @@ let make = (~randomInt=Random.int) => {
   <div>
     {<p>
        {let strings =
-          Belt.List.map(
-            state.generatedAdventure.perils,
-            StringRenderer.render,
+          Belt.List.map(state.generatedAdventure.perils, ((p, n)) =>
+            string_of_int(n) ++ " " ++ StringRenderer.render(p)
           );
         React.string(Js.Array.joinWith(", ", Belt.List.toArray(strings)))}
      </p>
