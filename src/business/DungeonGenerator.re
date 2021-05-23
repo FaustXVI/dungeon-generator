@@ -14,6 +14,14 @@ module PerilComparator =
 
 type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
 
+let newEncounter: encounter = {
+  perils: Map.make(~id=(module PerilComparator)),
+};
+
+let containing = (encounter: encounter, peril: peril, number: int): encounter => {
+  {perils: encounter.perils->Map.set(peril, number)};
+};
+
 type chooser = list(peril) => option(peril);
 
 let pickRandom = (perils: list(peril)) => head(shuffle(perils));
