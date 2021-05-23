@@ -20,13 +20,10 @@ let make = (~randomInt=Random.int) => {
   <div>
     {<p>
        {let strings =
-          Belt.List.map(state.generatedAdventure.perils, p => {
-            switch (p) {
-            | Creature => "Creature"
-            | SimpleDanger => "Simple Danger"
-            | ComplexDanger => "Complex Danger"
-            }
-          });
+          Belt.List.map(
+            state.generatedAdventure.perils,
+            StringRenderer.render,
+          );
         React.string(Js.Array.joinWith(", ", Belt.List.toArray(strings)))}
      </p>
      ->TestId.testId(~testId="dungeon")}
