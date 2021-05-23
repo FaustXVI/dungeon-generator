@@ -1,38 +1,41 @@
 open Jest;
+open Belt;
 open Expect;
 open DungeonGenerator;
 
 module EncounterComparator =
-  Belt.Id.MakeComparable({
+  Id.MakeComparable({
     type t = encounter;
     let cmp = (a, b) =>
-      Belt.List.cmp(
-        a.perils, b.perils, ((elem1: peril, _), (elem2: peril, _)) =>
-        compare(elem1, elem2)
-      );
+      Map.cmp(a.perils, b.perils, (n1, n2) => compare(n1, n2));
   });
+
+let emptyPerils = Map.make(~id=(module PerilComparator));
 
 describe("Encounter Generator", () => {
   describe("unit tests", () => {
     describe("generate encounter", () => {
       test("can generate a moderate encounter with creatures only", () => {
-        expect(generateEncounter(~perils=[|Creature|], ~chooser=pickRandom))
-        |> toEqual({perils: [(Creature, 2)]})
+        expect(
+          generateEncounter(~perils=[|Creature|], ~chooser=pickRandom).
+            perils,
+        )
+        |> toEqual(emptyPerils->Map.set(Creature, 2))
       });
 
       test(
         "can generate a moderate encounter with creatures and dangers chosen via specific criteria",
         () => {
-          let pickFirst = alist => Belt.List.head(alist);
-          let tenSimpleDangers = [(SimpleDanger, 10)];
-          let expected = {perils: tenSimpleDangers};
+          let pickFirst = alist => List.head(alist);
+          let tenSimpleDangers = emptyPerils->Map.set(SimpleDanger, 10);
           expect(
             generateEncounter(
               ~perils=[|SimpleDanger, Creature|],
               ~chooser=pickFirst,
-            ),
+            ).
+              perils,
           )
-          |> toEqual(expected);
+          |> toEqual(tenSimpleDangers);
         },
       );
     });
@@ -40,31 +43,43 @@ describe("Encounter Generator", () => {
       test(
         "experience points of an encounter with 1 creature only is 40 points",
         () => {
-        expect(experiencePoints({perils: [(Creature, 1)]})) |> toEqual(40)
+        expect(
+          experiencePoints({perils: emptyPerils->Map.set(Creature, 1)}),
+        )
+        |> toEqual(40)
       });
       test(
         "experience points of an encounter with 1 complex danger only is 40 points",
         () => {
-        expect(experiencePoints({perils: [(ComplexDanger, 1)]}))
+        expect(
+          experiencePoints({perils: emptyPerils->Map.set(ComplexDanger, 1)}),
+        )
         |> toEqual(40)
       });
       test(
         "experience points of an encounter with 1 simple danger  only is 8 points",
         () => {
-        expect(experiencePoints({perils: [(SimpleDanger, 1)]}))
+        expect(
+          experiencePoints({perils: emptyPerils->Map.set(SimpleDanger, 1)}),
+        )
         |> toEqual(8)
       });
       test(
         "experience points of an encounter with 2 simple danger only is 16 points",
         () => {
-        expect(experiencePoints({perils: [(SimpleDanger, 2)]}))
+        expect(
+          experiencePoints({perils: emptyPerils->Map.set(SimpleDanger, 2)}),
+        )
         |> toEqual(16)
       });
       test(
         "experience points of an encounter with 1 simple danger and 1 creature is 48 points",
         () => {
         expect(
-          experiencePoints({perils: [(SimpleDanger, 1), (Creature, 1)]}),
+          experiencePoints({
+            perils:
+              emptyPerils->Map.set(SimpleDanger, 1)->Map.set(Creature, 1),
+          }),
         )
         |> toEqual(48)
       });
@@ -87,16 +102,15 @@ describe("Encounter Generator", () => {
       // generate a dozen of encouters (with a fixed seed)
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
-        ->Belt.Array.map(_ =>
+        ->Array.map(_ =>
             generateEncounter(
               ~perils=[|Creature, SimpleDanger|],
               ~chooser=pickRandom,
             )
           );
-      let set =
-        Belt.Set.fromArray(encounters, ~id=(module EncounterComparator));
+      let set = Set.fromArray(encounters, ~id=(module EncounterComparator));
 
-      expect(Belt.Set.size(set)) |> toBeGreaterThan(1);
+      expect(Set.size(set)) |> toBeGreaterThan(1);
     });
   });
 });

@@ -12,7 +12,7 @@ module PerilComparator =
     let cmp = (a: peril, b: peril) => compare(a, b);
   });
 
-type encounter = {perils: list((peril, int))};
+type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
 
 type chooser = list(peril) => option(peril);
 
@@ -26,8 +26,9 @@ let experiencePointForPeril = (peril: peril) => {
   };
 };
 let experiencePoints = (~encounter: encounter) => {
-  map(encounter.perils, ((p, n)) => n * experiencePointForPeril(p))
-  ->reduce(0, (a, b) => a + b);
+  Map.reduce(encounter.perils, 0, (acc, p, n) =>
+    acc + n * experiencePointForPeril(p)
+  );
 };
 
 exception Peril_Not_Found;
@@ -73,5 +74,5 @@ let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter =>
       Map.make(~id=(module PerilComparator)),
       80,
     );
-  {perils: Map.toList(perils)};
+  {perils: perils};
 };
