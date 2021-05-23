@@ -22,6 +22,11 @@ let containing = (encounter: encounter, peril: peril, number: int): encounter =>
   {perils: encounter.perils->Map.set(peril, number)};
 };
 
+let reduce =
+    (encounter: encounter, accumulator: 'a, f: ('a, peril, int) => 'a): 'a => {
+  encounter.perils->Map.reduce(accumulator, f);
+};
+
 type chooser = list(peril) => option(peril);
 
 let pickRandom = (perils: list(peril)) => head(shuffle(perils));

@@ -12,6 +12,32 @@ module EncounterComparator =
 
 describe("Encounter Generator", () => {
   describe("unit tests", () => {
+    describe("reduce on encounter's perils", () => {
+      test("can reduce encounter's perils with any reducer function", () => {
+        expect(
+          newEncounter
+          ->containing(Creature, 2)
+          ->containing(SimpleDanger, 3)
+          ->reduce("", (acc, p, n) =>
+              acc
+              ++ StringRenderer.render(p)
+              ++ " "
+              ++ string_of_int(n)
+              ++ " "
+            ),
+        )
+        |> toEqual("Creature 2 Simple Danger 3 ")
+      });
+      test("can reduce encounter's perils so that we can count perils", () => {
+        expect(
+          newEncounter
+          ->containing(Creature, 2)
+          ->containing(SimpleDanger, 3)
+          ->reduce(0, (acc, _, n) => acc + n),
+        )
+        |> toEqual(5)
+      });
+    });
     describe("generate encounter", () => {
       test("can generate a moderate encounter with creatures only", () => {
         expect(generateEncounter(~perils=[|Creature|], ~chooser=pickRandom))

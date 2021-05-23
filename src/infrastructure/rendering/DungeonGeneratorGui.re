@@ -24,7 +24,7 @@ let make = (~randomInt=Random.int) => {
   <div>
     {<p>
        {let strings =
-          Map.reduce(state.generatedAdventure.perils, [], (acc, p, n) =>
+          DungeonGenerator.reduce(state.generatedAdventure, [], (acc, p, n) =>
             acc->List.add(
               string_of_int(n) ++ " " ++ StringRenderer.render(p),
             )
