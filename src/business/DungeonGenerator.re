@@ -2,14 +2,23 @@ open Belt.List;
 open Belt;
 
 type peril =
-  | Creature
-  | SimpleDanger
-  | ComplexDanger;
+  | Creature(int)
+  | SimpleDanger(int)
+  | ComplexDanger(int);
 
 module PerilComparator =
   Id.MakeComparable({
     type t = peril;
-    let cmp = (a: peril, b: peril) => compare(a, b);
+    let cmp = (a: peril, b: peril) =>
+      switch (a, b) {
+      | (Creature(_), Creature(_))
+      | (SimpleDanger(_), SimpleDanger(_))
+      | (ComplexDanger(_), ComplexDanger(_)) => 0
+      | (Creature(_), _) => (-1)
+      | (SimpleDanger(_), Creature(_)) => 1
+      | (SimpleDanger(_), ComplexDanger(_)) => (-1)
+      | (ComplexDanger(_), _) => 1
+      };
   });
 
 type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
@@ -33,9 +42,9 @@ let pickRandom = (perils: list(peril)) => head(shuffle(perils));
 
 let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
-  | SimpleDanger => 8
-  | Creature
-  | ComplexDanger => 40
+  | SimpleDanger(_) => 8
+  | Creature(_)
+  | ComplexDanger(_) => 40
   };
 };
 let experiencePoints = (~encounter: encounter) => {

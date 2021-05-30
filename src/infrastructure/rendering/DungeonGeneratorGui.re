@@ -9,7 +9,7 @@ type action =
 let initialState = {
   generatedAdventure:
     generateEncounter(
-      ~perils=[|Creature, SimpleDanger, ComplexDanger|],
+      ~perils=[|Creature(0), SimpleDanger(0), ComplexDanger(0)|],
       ~chooser=pickRandom,
     ),
 };
