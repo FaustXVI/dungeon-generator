@@ -125,10 +125,7 @@ describe("Encounter Generator", () => {
     test("moderate encounter represents 80 experience points", () => {
       expect(
         experiencePoints(
-          generateEncounter(
-            ~perils=[|Creature(GroupLevel), SimpleDanger(GroupLevel)|],
-            ~chooser=pickRandom,
-          ),
+          generateEncounter(~perils=possiblePerils, ~chooser=pickRandom),
         ),
       )
       |> toEqual(80)
@@ -138,10 +135,7 @@ describe("Encounter Generator", () => {
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
-            generateEncounter(
-              ~perils=[|Creature(GroupLevel), SimpleDanger(GroupLevel)|],
-              ~chooser=pickRandom,
-            )
+            generateEncounter(~perils=possiblePerils, ~chooser=pickRandom)
           );
       let set = Set.fromArray(encounters, ~id=(module EncounterComparator));
 
@@ -149,18 +143,3 @@ describe("Encounter Generator", () => {
     });
   });
 });
-
-// Product Owner's test:
-//  the app can generate a moderate encounter with creatures and simple dangers
-//  the resulting list should be chosen at random
-//  the sum of XP from these perils should match the experience level (80 XP)
-
-//    test("can generate a moderate encouter with creatures and simple dangers", () => {
-//        let result = generateEncounter(~perils[|Creature,SimpleDanger|]);
-//        sorted result is one of
-//        [Creature, Creature]
-//        [Creature, SimpleDanger * 5]
-//        [SimpleDanger*10]
-//
-
-// TODO : add the notion of group level to all of this

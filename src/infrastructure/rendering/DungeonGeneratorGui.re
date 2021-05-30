@@ -8,14 +8,7 @@ type action =
 
 let initialState = {
   generatedAdventure:
-    generateEncounter(
-      ~perils=[|
-        Creature(GroupLevel),
-        SimpleDanger(GroupLevel),
-        ComplexDanger(GroupLevel),
-      |],
-      ~chooser=pickRandom,
-    ),
+    generateEncounter(~perils=possiblePerils, ~chooser=pickRandom),
 };
 
 let reducer = (_, s, _) => {

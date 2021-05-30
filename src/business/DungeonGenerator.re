@@ -101,3 +101,9 @@ let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter =>
     );
   {perils: perils};
 };
+
+let possiblePerils = [|
+  Creature(GroupLevel),
+  SimpleDanger(GroupLevel),
+  ComplexDanger(GroupLevel),
+|];
