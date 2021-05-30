@@ -2,7 +2,8 @@ open Belt.List;
 open Belt;
 
 type level =
-  | GroupLevel;
+  | GroupLevel
+  | GroupLevelMinus1;
 
 type peril =
   | Creature(level)
@@ -38,6 +39,13 @@ let reduce =
     (encounter: encounter, accumulator: 'a, f: ('a, peril, int) => 'a): 'a => {
   encounter.perils->Map.reduce(accumulator, f);
 };
+
+let perilLevel = (peril: peril) =>
+  switch (peril) {
+  | SimpleDanger(level) => level
+  | ComplexDanger(level) => level
+  | Creature(level) => level
+  };
 
 type chooser = list(peril) => option(peril);
 
@@ -106,4 +114,7 @@ let possiblePerils = [|
   Creature(GroupLevel),
   SimpleDanger(GroupLevel),
   ComplexDanger(GroupLevel),
+  Creature(GroupLevelMinus1),
+  SimpleDanger(GroupLevelMinus1),
+  ComplexDanger(GroupLevelMinus1),
 |];

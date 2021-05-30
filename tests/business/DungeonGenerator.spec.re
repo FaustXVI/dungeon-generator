@@ -10,6 +10,12 @@ module EncounterComparator =
       Map.cmp(a.perils, b.perils, (n1, n2) => compare(n1, n2));
   });
 
+module LevelComparator =
+  Id.MakeComparable({
+    type t = level;
+    let cmp = (a: level, b: level) => compare(a, b);
+  });
+
 describe("Encounter Generator", () => {
   describe("unit tests", () => {
     describe("reduce on encounter's perils", () => {
@@ -64,6 +70,20 @@ describe("Encounter Generator", () => {
           |> toEqual(tenSimpleDangers);
         },
       );
+    });
+    describe("peril level", () => {
+      [GroupLevel, GroupLevelMinus1]
+      ->List.forEach(level => {
+          test("gives a simple danger's level", () => {
+            expect(perilLevel(SimpleDanger(level))) |> toEqual(level)
+          });
+          test("gives a complex danger's level", () => {
+            expect(perilLevel(ComplexDanger(level))) |> toEqual(level)
+          });
+          test("gives a creature's level", () => {
+            expect(perilLevel(Creature(level))) |> toEqual(level)
+          });
+        })
     });
     describe("experience points", () => {
       test(
@@ -138,6 +158,20 @@ describe("Encounter Generator", () => {
             generateEncounter(~perils=possiblePerils, ~chooser=pickRandom)
           );
       let set = Set.fromArray(encounters, ~id=(module EncounterComparator));
+
+      expect(Set.size(set)) |> toBeGreaterThan(1);
+    });
+    test("two moderate encounters may contain different peril level", () => {
+      // generate a dozen of encouters (with a fixed seed)
+      let encounters =
+        [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
+        ->Array.map(_ =>
+            generateEncounter(~perils=possiblePerils, ~chooser=pickRandom)
+            ->reduce([], (acc, p, _) => List.add(acc, perilLevel(p)))
+            ->List.toArray
+          )
+        ->Array.concatMany;
+      let set = Set.fromArray(encounters, ~id=(module LevelComparator));
 
       expect(Set.size(set)) |> toBeGreaterThan(1);
     });
