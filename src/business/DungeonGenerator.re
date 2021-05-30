@@ -2,8 +2,8 @@ open Belt.List;
 open Belt;
 
 type level =
-  | GroupLevel
-  | GroupLevelMinus1;
+  | FooBar
+  | GroupLevel;
 
 type peril =
   | Creature(level)
@@ -53,7 +53,8 @@ let pickRandom = (perils: list(peril)) => head(shuffle(perils));
 
 let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
-  | SimpleDanger(_) => 8
+  | SimpleDanger(FooBar) => 6
+  | SimpleDanger(GroupLevel) => 8
   | Creature(_)
   | ComplexDanger(_) => 40
   };
@@ -64,7 +65,7 @@ let experiencePoints = (~encounter: encounter) => {
   );
 };
 
-exception Peril_Not_Found;
+exception Peril_Not_Found(string);
 
 let increment = (value: option(int)): option(int) =>
   switch (value) {
@@ -86,7 +87,13 @@ let rec addPeril =
         : Map.t(peril, int, PerilComparator.identity) =>
   if (goal > 0) {
     switch (chooser(perils->upToGoal(goal))) {
-    | None => raise(Peril_Not_Found)
+    | None =>
+      raise(
+        Peril_Not_Found(
+          "Could not find a peril for the experience goal of "
+          ++ string_of_int(goal),
+        ),
+      )
     | Some(peril) =>
       addPeril(
         chooser,
@@ -114,7 +121,7 @@ let possiblePerils = [|
   Creature(GroupLevel),
   SimpleDanger(GroupLevel),
   ComplexDanger(GroupLevel),
-  Creature(GroupLevelMinus1),
-  SimpleDanger(GroupLevelMinus1),
-  ComplexDanger(GroupLevelMinus1),
+  //  SimpleDanger(FooBar),
+  //  Creature(FooBar),
+  //  ComplexDanger(FooBar),
 |];

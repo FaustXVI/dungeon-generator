@@ -72,7 +72,7 @@ describe("Encounter Generator", () => {
       );
     });
     describe("peril level", () => {
-      [GroupLevel, GroupLevelMinus1]
+      [GroupLevel, FooBar]
       ->List.forEach(level => {
           test("gives a simple danger's level", () => {
             expect(perilLevel(SimpleDanger(level))) |> toEqual(level)
@@ -115,6 +115,16 @@ describe("Encounter Generator", () => {
           ),
         )
         |> toEqual(8)
+      });
+      test(
+        "experience points of an encounter with 1 simple danger level -1 only is 6 points",
+        () => {
+        expect(
+          experiencePoints(
+            newEncounter->containing(SimpleDanger(FooBar), 1),
+          ),
+        )
+        |> toEqual(6)
       });
       test(
         "experience points of an encounter with 2 simple danger only is 16 points",
