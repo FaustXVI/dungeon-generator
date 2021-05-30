@@ -65,8 +65,6 @@ let experiencePoints = (~encounter: encounter) => {
   );
 };
 
-exception Peril_Not_Found(string);
-
 let increment = (value: option(int)): option(int) =>
   switch (value) {
   | None => Some(1)
@@ -76,6 +74,10 @@ let increment = (value: option(int)): option(int) =>
 let upToGoal = (perils: list(peril), goal: int): list(peril) => {
   keep(perils, p => experiencePointForPeril(p) <= goal);
 };
+
+exception TODO(string);
+
+let todo = (message: string) => raise(TODO(message));
 
 let rec addPeril =
         (
@@ -88,11 +90,9 @@ let rec addPeril =
   if (goal > 0) {
     switch (chooser(perils->upToGoal(goal))) {
     | None =>
-      raise(
-        Peril_Not_Found(
-          "Could not find a peril for the experience goal of "
-          ++ string_of_int(goal),
-        ),
+      todo(
+        "Could not find a peril for the experience goal of "
+        ++ string_of_int(goal),
       )
     | Some(peril) =>
       addPeril(
@@ -121,7 +121,7 @@ let possiblePerils = [|
   Creature(GroupLevel),
   SimpleDanger(GroupLevel),
   ComplexDanger(GroupLevel),
-  //  SimpleDanger(FooBar),
-  //  Creature(FooBar),
-  //  ComplexDanger(FooBar),
+  SimpleDanger(FooBar),
+  Creature(FooBar),
+  ComplexDanger(FooBar),
 |];

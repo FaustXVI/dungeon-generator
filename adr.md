@@ -49,6 +49,11 @@ Business domain objects are purely functional values
 
 (the way to use random for randomizing the values is still in debate)
 
+### When dealing with a misterious failure
 
+Grep the failure in the code
 
+### When raising an exception
 
+Always include a message
+Use a TODO function to explicitly show holes in the code
