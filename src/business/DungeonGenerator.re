@@ -1,10 +1,13 @@
 open Belt.List;
 open Belt;
 
+type level =
+  | GroupLevel;
+
 type peril =
-  | Creature(int)
-  | SimpleDanger(int)
-  | ComplexDanger(int);
+  | Creature(level)
+  | SimpleDanger(level)
+  | ComplexDanger(level);
 
 module PerilComparator =
   Id.MakeComparable({

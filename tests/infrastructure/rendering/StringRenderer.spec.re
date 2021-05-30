@@ -6,9 +6,9 @@ open DungeonGenerator;
 
 describe("String renderer", () => {
   [
-    (Creature(0), "Creature"),
-    (SimpleDanger(0), "Simple Danger"),
-    (ComplexDanger(0), "Complex Danger"),
+    (Creature(GroupLevel), "Creature"),
+    (SimpleDanger(GroupLevel), "Simple Danger"),
+    (ComplexDanger(GroupLevel), "Complex Danger"),
   ]
   ->forEach(((peril, label)) => {
       test("provide a string for any peril value", () => {

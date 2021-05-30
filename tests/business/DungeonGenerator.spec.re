@@ -16,8 +16,8 @@ describe("Encounter Generator", () => {
       test("can reduce encounter's perils with any reducer function", () => {
         expect(
           newEncounter
-          ->containing(Creature(0), 2)
-          ->containing(SimpleDanger(0), 3)
+          ->containing(Creature(GroupLevel), 2)
+          ->containing(SimpleDanger(GroupLevel), 3)
           ->reduce("", (acc, p, n) =>
               acc
               ++ StringRenderer.render(p)
@@ -31,8 +31,8 @@ describe("Encounter Generator", () => {
       test("can reduce encounter's perils so that we can count perils", () => {
         expect(
           newEncounter
-          ->containing(Creature(0), 2)
-          ->containing(SimpleDanger(0), 3)
+          ->containing(Creature(GroupLevel), 2)
+          ->containing(SimpleDanger(GroupLevel), 3)
           ->reduce(0, (acc, _, n) => acc + n),
         )
         |> toEqual(5)
@@ -41,9 +41,12 @@ describe("Encounter Generator", () => {
     describe("generate encounter", () => {
       test("can generate a moderate encounter with creatures only", () => {
         expect(
-          generateEncounter(~perils=[|Creature(0)|], ~chooser=pickRandom),
+          generateEncounter(
+            ~perils=[|Creature(GroupLevel)|],
+            ~chooser=pickRandom,
+          ),
         )
-        |> toEqual(newEncounter->containing(Creature(0), 2))
+        |> toEqual(newEncounter->containing(Creature(GroupLevel), 2))
       });
 
       test(
@@ -51,10 +54,10 @@ describe("Encounter Generator", () => {
         () => {
           let pickFirst = alist => List.head(alist);
           let tenSimpleDangers =
-            newEncounter->containing(SimpleDanger(0), 10);
+            newEncounter->containing(SimpleDanger(GroupLevel), 10);
           expect(
             generateEncounter(
-              ~perils=[|SimpleDanger(0), Creature(0)|],
+              ~perils=[|SimpleDanger(GroupLevel), Creature(GroupLevel)|],
               ~chooser=pickFirst,
             ),
           )
@@ -66,14 +69,20 @@ describe("Encounter Generator", () => {
       test(
         "experience points of an encounter with 1 creature only is 40 points",
         () => {
-        expect(experiencePoints(newEncounter->containing(Creature(0), 1)))
+        expect(
+          experiencePoints(
+            newEncounter->containing(Creature(GroupLevel), 1),
+          ),
+        )
         |> toEqual(40)
       });
       test(
         "experience points of an encounter with 1 complex danger only is 40 points",
         () => {
         expect(
-          experiencePoints(newEncounter->containing(ComplexDanger(0), 1)),
+          experiencePoints(
+            newEncounter->containing(ComplexDanger(GroupLevel), 1),
+          ),
         )
         |> toEqual(40)
       });
@@ -81,7 +90,9 @@ describe("Encounter Generator", () => {
         "experience points of an encounter with 1 simple danger  only is 8 points",
         () => {
         expect(
-          experiencePoints(newEncounter->containing(SimpleDanger(0), 1)),
+          experiencePoints(
+            newEncounter->containing(SimpleDanger(GroupLevel), 1),
+          ),
         )
         |> toEqual(8)
       });
@@ -89,7 +100,9 @@ describe("Encounter Generator", () => {
         "experience points of an encounter with 2 simple danger only is 16 points",
         () => {
         expect(
-          experiencePoints(newEncounter->containing(SimpleDanger(0), 2)),
+          experiencePoints(
+            newEncounter->containing(SimpleDanger(GroupLevel), 2),
+          ),
         )
         |> toEqual(16)
       });
@@ -99,8 +112,8 @@ describe("Encounter Generator", () => {
         expect(
           experiencePoints(
             newEncounter
-            ->containing(SimpleDanger(0), 1)
-            ->containing(Creature(0), 1),
+            ->containing(SimpleDanger(GroupLevel), 1)
+            ->containing(Creature(GroupLevel), 1),
           ),
         )
         |> toEqual(48)
@@ -113,7 +126,7 @@ describe("Encounter Generator", () => {
       expect(
         experiencePoints(
           generateEncounter(
-            ~perils=[|Creature(0), SimpleDanger(0)|],
+            ~perils=[|Creature(GroupLevel), SimpleDanger(GroupLevel)|],
             ~chooser=pickRandom,
           ),
         ),
@@ -126,7 +139,7 @@ describe("Encounter Generator", () => {
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
             generateEncounter(
-              ~perils=[|Creature(0), SimpleDanger(0)|],
+              ~perils=[|Creature(GroupLevel), SimpleDanger(GroupLevel)|],
               ~chooser=pickRandom,
             )
           );
