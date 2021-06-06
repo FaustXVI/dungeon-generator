@@ -21,16 +21,16 @@ describe("Encounter Generator", () => {
     describe("reduce on encounter's perils", () => {
       test("can reduce encounter's perils with any reducer function", () => {
         expect(
-          newEncounter
-          ->containing(Creature(GroupLevel), 2)
-          ->containing(SimpleDanger(GroupLevel), 3)
-          ->reduce("", (acc, p, n) =>
+          newEncounter2
+          ->containing2({ peril_type: Creature2, level: GroupLevel }, 2)
+          ->containing2({ peril_type: SimpleDanger2, level: GroupLevel } , 3)
+          ->reduce2("", (acc, p, n) =>
               acc
               ++ (
                 switch (p) {
-                | Creature(_) => "Creature"
-                | SimpleDanger(_) => "Simple Danger"
-                | ComplexDanger(_) => "Complex Danger"
+                | { peril_type: Creature2, level: _ } => "Creature"
+                | { peril_type: SimpleDanger2, level: _ } => "Simple Danger"
+                | { peril_type: ComplexDanger2,level: _ } => "Complex Danger"
                 }
               )
               ++ " "
@@ -42,10 +42,10 @@ describe("Encounter Generator", () => {
       });
       test("can reduce encounter's perils so that we can count perils", () => {
         expect(
-          newEncounter
-          ->containing(Creature(GroupLevel), 2)
-          ->containing(SimpleDanger(GroupLevel), 3)
-          ->reduce(0, (acc, _, n) => acc + n),
+          newEncounter2
+          ->containing2( { peril_type: Creature2, level: GroupLevel }, 2)
+          ->containing2( { peril_type: SimpleDanger2, level: GroupLevel }, 3)
+          ->reduce2(0, (acc, _, n) => acc + n),
         )
         |> toEqual(5)
       });
@@ -53,12 +53,12 @@ describe("Encounter Generator", () => {
     describe("generate encounter", () => {
       test("can generate a moderate encounter with creatures only", () => {
         expect(
-          generateEncounter(
-            ~perils=[|Creature(GroupLevel)|],
-            ~chooser=pickRandom,
+          generateEncounter2(
+            ~perils2=[| { peril_type: Creature2, level: GroupLevel }|],
+            ~chooser2=pickRandom2,
           ),
         )
-        |> toEqual(newEncounter->containing(Creature(GroupLevel), 2))
+        |> toEqual(newEncounter2->containing2( { peril_type: Creature2, level: GroupLevel }, 2))
       });
 
       test(
@@ -66,11 +66,11 @@ describe("Encounter Generator", () => {
         () => {
           let pickFirst = alist => List.head(alist);
           let tenSimpleDangers =
-            newEncounter->containing(SimpleDanger(GroupLevel), 10);
+            newEncounter2->containing2({ peril_type: SimpleDanger2, level: GroupLevel }, 10);
           expect(
-            generateEncounter(
-              ~perils=[|SimpleDanger(GroupLevel), Creature(GroupLevel)|],
-              ~chooser=pickFirst,
+            generateEncounter2(
+              ~perils2=[|{ peril_type: SimpleDanger2, level: GroupLevel }, { peril_type: Creature2, level: GroupLevel }|],
+              ~chooser2=pickFirst,
             ),
           )
           |> toEqual(tenSimpleDangers);
@@ -78,14 +78,14 @@ describe("Encounter Generator", () => {
       );
       test("encounter can map peril to number of perils", () => {
         let encounter =
-          newEncounter
-          ->containing(SimpleDanger(GroupLevelMinus1), 1)
-          ->containing(SimpleDanger(GroupLevel), 20)
-          ->containing(ComplexDanger(GroupLevel), 4000)
-          ->containing(ComplexDanger(GroupLevelMinus1), 300)
-          ->containing(Creature(GroupLevelMinus1), 50000)
-          ->containing(Creature(GroupLevel), 600000);
-        expect(encounter->reduce(0, (a, _, i) => a + i)) |> toEqual(654321);
+          newEncounter2
+          ->containing2({ peril_type: SimpleDanger2, level: GroupLevelMinus1 }, 1)
+          ->containing2({ peril_type: SimpleDanger2, level: GroupLevel }, 20)
+          ->containing2({ peril_type: ComplexDanger2, level: GroupLevel }, 4000)
+          ->containing2({ peril_type: ComplexDanger2, level: GroupLevelMinus1 }, 300)
+          ->containing2({ peril_type: Creature2, level: GroupLevelMinus1 }, 50000)
+          ->containing2({ peril_type: Creature2, level: GroupLevel } , 600000);
+        expect(encounter->reduce2(0, (a, _, i) => a + i)) |> toEqual(654321);
       });
 
       test(

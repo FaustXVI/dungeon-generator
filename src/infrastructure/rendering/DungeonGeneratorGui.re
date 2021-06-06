@@ -27,7 +27,7 @@ let make = (~randomInt=Random.int) => {
             )
           )
           ->List.toArray;
-        strings->Array.map(s => <li> {React.string(s)} </li>)->React.array}
+        strings->Array.map(s => <li key={s}> {React.string(s)} </li>)->React.array}
      </ul>
      ->TestId.testId(~testId="dungeon")}
   </div>;
