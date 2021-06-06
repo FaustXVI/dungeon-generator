@@ -26,7 +26,13 @@ describe("Encounter Generator", () => {
           ->containing(SimpleDanger(GroupLevel), 3)
           ->reduce("", (acc, p, n) =>
               acc
-              ++ StringRenderer.render(p)
+              ++ (
+                switch (p) {
+                | Creature(_) => "Creature"
+                | SimpleDanger(_) => "Simple Danger"
+                | ComplexDanger(_) => "Complex Danger"
+                }
+              )
               ++ " "
               ++ string_of_int(n)
               ++ " "
@@ -70,6 +76,17 @@ describe("Encounter Generator", () => {
           |> toEqual(tenSimpleDangers);
         },
       );
+      test("encounter can map peril to number of perils", () => {
+        let encounter =
+          newEncounter
+          ->containing(SimpleDanger(GroupLevelMinus1), 1)
+          ->containing(SimpleDanger(GroupLevel), 20)
+          ->containing(ComplexDanger(GroupLevel), 4000)
+          ->containing(ComplexDanger(GroupLevelMinus1), 300)
+          ->containing(Creature(GroupLevelMinus1), 50000)
+          ->containing(Creature(GroupLevel), 600000);
+        expect(encounter->reduce(0, (a, _, i) => a + i)) |> toEqual(654321);
+      });
 
       test(
         "can generate a moderate encounter with a bit more XP than necessary",
@@ -168,10 +185,9 @@ describe("Encounter Generator", () => {
 
   describe("acceptance tests", () => {
     test("moderate encounter represents 80 experience points", () => {
-      let result =
-        experiencePoints(
-          generateEncounter(~perils=possiblePerils, ~chooser=pickRandom),
-        );
+      let encounter =
+        generateEncounter(~perils=possiblePerils, ~chooser=pickRandom);
+      let result = experiencePoints(encounter);
       expect(result >= 80 && result <= 86) |> toBe(true);
     });
     test("two moderate encounters are potentially distinct", () => {

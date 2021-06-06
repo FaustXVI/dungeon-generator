@@ -15,9 +15,9 @@ module PerilComparator =
     type t = peril;
     let cmp = (a: peril, b: peril) =>
       switch (a, b) {
-      | (Creature(_), Creature(_))
-      | (SimpleDanger(_), SimpleDanger(_))
-      | (ComplexDanger(_), ComplexDanger(_)) => 0
+      | (Creature(lvla), Creature(lvlb))
+      | (SimpleDanger(lvla), SimpleDanger(lvlb))
+      | (ComplexDanger(lvla), ComplexDanger(lvlb)) => compare(lvla, lvlb)
       | (Creature(_), _) => (-1)
       | (SimpleDanger(_), Creature(_)) => 1
       | (SimpleDanger(_), ComplexDanger(_)) => (-1)
