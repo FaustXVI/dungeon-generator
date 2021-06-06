@@ -19,15 +19,16 @@ let reducer = (_, s, _) => {
 let make = (~randomInt=Random.int) => {
   let (state, _) = React.useReducer(reducer(randomInt), initialState);
   <div>
-    {<p>
+    {<ul>
        {let strings =
           DungeonGenerator.reduce(state.generatedAdventure, [], (acc, p, n) =>
             acc->List.add(
               string_of_int(n) ++ " " ++ StringRenderer.render(p),
             )
-          );
-        React.string(Js.Array.joinWith(", ", List.toArray(strings)))}
-     </p>
+          )
+          ->List.toArray;
+        strings->Array.map(s => <li> {React.string(s)} </li>)->React.array}
+     </ul>
      ->TestId.testId(~testId="dungeon")}
   </div>;
 };
