@@ -70,9 +70,24 @@ describe("Encounter Generator", () => {
           |> toEqual(tenSimpleDangers);
         },
       );
+
+      test(
+        "can generate a moderate encounter with a bit more XP than necessary",
+        () => {
+        let pickFirst = alist => List.head(alist);
+        let tenSimpleDangers =
+          newEncounter->containing(SimpleDanger(GroupLevelMinus1), 14);
+        expect(
+          generateEncounter(
+            ~perils=[|SimpleDanger(GroupLevelMinus1)|],
+            ~chooser=pickFirst,
+          ),
+        )
+        |> toEqual(tenSimpleDangers);
+      });
     });
     describe("peril level", () => {
-      [GroupLevel, FooBar]
+      [GroupLevel, GroupLevelMinus1]
       ->List.forEach(level => {
           test("gives a simple danger's level", () => {
             expect(perilLevel(SimpleDanger(level))) |> toEqual(level)
@@ -121,7 +136,7 @@ describe("Encounter Generator", () => {
         () => {
         expect(
           experiencePoints(
-            newEncounter->containing(SimpleDanger(FooBar), 1),
+            newEncounter->containing(SimpleDanger(GroupLevelMinus1), 1),
           ),
         )
         |> toEqual(6)
@@ -153,12 +168,11 @@ describe("Encounter Generator", () => {
 
   describe("acceptance tests", () => {
     test("moderate encounter represents 80 experience points", () => {
-      expect(
+      let result =
         experiencePoints(
           generateEncounter(~perils=possiblePerils, ~chooser=pickRandom),
-        ),
-      )
-      |> toEqual(80)
+        );
+      expect(result >= 80 && result <= 86) |> toBe(true);
     });
     test("two moderate encounters are potentially distinct", () => {
       // generate a dozen of encouters (with a fixed seed)
