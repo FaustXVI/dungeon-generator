@@ -59,3 +59,11 @@ open indexProduction.html
 To serve the files, this template uses a minimal dependency called `moduleserve`. A URL such as `localhost:8000/scores/john` resolves to the file `scores/john.html`. If you'd like to override this and handle URL resolution yourself, change the `server` command in `package.json` from `moduleserve ./ --port 8000` to `moduleserve ./ --port 8000 --spa` (for "single page application"). This will make `moduleserve` serve the default `index.html` for any URL. Since `index.html` loads `Index.bs.js`, you can grab hold of the URL in the corresponding `Index.re` and do whatever you want.
 
 By the way, ReasonReact comes with a small [router](https://reasonml.github.io/reason-react/docs/en/router) you might be interested in.
+
+# GADT
+
+Types should hide their representation frow clients. Create constructors for values. Pattern Matching on the representation should happen inside the module. 
+
+# If you write a Map with your own key comparator, you have to have tests for it
+
+Is it worth it? Can we find a better way to just map a peril with a number of occurrences.
