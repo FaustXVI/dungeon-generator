@@ -3,6 +3,7 @@ open Belt;
 open Expect;
 open Peril;
 open Encounter;
+open StringRenderer;
 
 module EncounterComparator =
   Id.MakeComparable({
@@ -33,30 +34,18 @@ describe("Encounter Generator", () => {
       })
   });
   describe("experience points for peril", () => {
-    test(
-      "experience points of an encounter with 1 creature only is 40 points", () => {
-      expect(experiencePointForPeril(aPeril(Creature, GroupLevel)))
-      |> toEqual(40)
-    });
-    test(
-      "experience points of an encounter with 1 complex danger only is 40 points",
-      () => {
-      expect(experiencePointForPeril(aPeril(ComplexDanger, GroupLevel)))
-      |> toEqual(40)
-    });
-    test(
-      "experience points of an encounter with 1 simple danger  only is 8 points",
-      () => {
-      expect(experiencePointForPeril(aPeril(SimpleDanger, GroupLevel)))
-      |> toEqual(8)
-    });
-    test(
-      "experience points of an encounter with 1 simple danger level -1 only is 6 points",
-      () => {
-      expect(
-        experiencePointForPeril(aPeril(SimpleDanger, GroupLevelMinus1)),
-      )
-      |> toEqual(6)
-    });
+    [
+      (Creature, GroupLevel, 40),
+      (ComplexDanger, GroupLevel, 40),
+      (SimpleDanger, GroupLevel, 8),
+      (SimpleDanger, GroupLevelMinus1, 6),
+    ]
+    ->List.forEach(((perilType, level, expectedExperience)) => {
+        test(
+          "experience points for " ++ render(aPeril(perilType, level)), () => {
+          expect(experiencePointForPeril(aPeril(perilType, level)))
+          |> toEqual(expectedExperience)
+        })
+      })
   });
 });
