@@ -1,6 +1,7 @@
 open Belt;
 
 type level =
+  | GroupLevelMinus3
   | GroupLevelMinus2
   | GroupLevelMinus1
   | GroupLevel
@@ -8,6 +9,7 @@ type level =
   | GroupLevelPlus2;
 
 let levels = [
+  GroupLevelMinus3,
   GroupLevelMinus2,
   GroupLevelMinus1,
   GroupLevel,
@@ -51,6 +53,7 @@ module PerilComparator =
 
 let experiencePointsForSimpleDanger = (level: level) => {
   switch (level) {
+  | GroupLevelMinus3 => 3
   | GroupLevelMinus2 => 4
   | GroupLevelMinus1 => 6
   | GroupLevel => 8
@@ -61,6 +64,7 @@ let experiencePointsForSimpleDanger = (level: level) => {
 
 let experiencePointsForCreatureAndComplexDanger = (level: level) => {
   switch (level) {
+  | GroupLevelMinus3 => 15
   | GroupLevelMinus2 => 20
   | GroupLevelMinus1 => 30
   | GroupLevel => 40
