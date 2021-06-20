@@ -3,6 +3,7 @@ open Belt;
 open Expect;
 open DungeonGenerator;
 open Peril;
+open Encounter;
 
 module EncounterComparator =
   Id.MakeComparable({

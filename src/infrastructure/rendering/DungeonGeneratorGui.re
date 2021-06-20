@@ -1,5 +1,6 @@
 open Belt;
 open DungeonGenerator;
+open Encounter;
 
 type state = {generatedAdventure: encounter};
 
@@ -21,13 +22,15 @@ let make = (~randomInt=Random.int) => {
   <div>
     {<ul>
        {let strings =
-          DungeonGenerator.reduce(state.generatedAdventure, [], (acc, p, n) =>
+          Encounter.reduce(state.generatedAdventure, [], (acc, p, n) =>
             acc->List.add(
               string_of_int(n) ++ " " ++ StringRenderer.render(p),
             )
           )
           ->List.toArray;
-        strings->Array.map(s => <li key={s}> {React.string(s)} </li>)->React.array}
+        strings
+        ->Array.map(s => <li key=s> {React.string(s)} </li>)
+        ->React.array}
      </ul>
      ->TestId.testId(~testId="dungeon")}
   </div>;
