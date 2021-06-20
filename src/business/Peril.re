@@ -6,7 +6,8 @@ type level =
   | GroupLevelMinus1
   | GroupLevel
   | GroupLevelPlus1
-  | GroupLevelPlus2;
+  | GroupLevelPlus2
+  | GroupLevelPlus3;
 
 let levels = [
   GroupLevelMinus3,
@@ -15,6 +16,7 @@ let levels = [
   GroupLevel,
   GroupLevelPlus1,
   GroupLevelPlus2,
+  GroupLevelPlus3,
 ];
 
 type perilType =
@@ -59,6 +61,7 @@ let experiencePointsForSimpleDanger = (level: level) => {
   | GroupLevel => 8
   | GroupLevelPlus1 => 12
   | GroupLevelPlus2 => 16
+  | GroupLevelPlus3 => 24
   };
 };
 
@@ -70,6 +73,7 @@ let experiencePointsForCreatureAndComplexDanger = (level: level) => {
   | GroupLevel => 40
   | GroupLevelPlus1 => 60
   | GroupLevelPlus2 => 80
+  | GroupLevelPlus3 => 120
   };
 };
 
