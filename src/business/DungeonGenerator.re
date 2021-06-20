@@ -5,17 +5,23 @@ type level =
   | GroupLevelMinus1
   | GroupLevel;
 
-type peril_type =
-  | Creature2
-  | SimpleDanger2
-  | ComplexDanger2;
-
-type peril2 = { peril_type: peril_type, level: level };
+type perilType =
+  | Creature
+  | SimpleDanger
+  | ComplexDanger;
 
 type peril =
   | Creature(level)
   | SimpleDanger(level)
   | ComplexDanger(level);
+
+let aPeril = (perilType: perilType, level: level): peril => {
+  switch (perilType) {
+  | Creature => Creature(level)
+  | SimpleDanger => SimpleDanger(level)
+  | ComplexDanger => ComplexDanger(level)
+  };
+};
 
 module PerilComparator =
   Id.MakeComparable({
@@ -32,47 +38,21 @@ module PerilComparator =
       };
   });
 
-module PerilComparator2 =
-  Id.MakeComparable({
-    type t = peril2;
-    let cmp = (a: peril2, b: peril2) =>
-      switch (a, b) {
-          | ({ peril_type: Creature2, level: level_a }, { peril_type: Creature2, level: level_b })
-          | ({ peril_type: SimpleDanger2, level: level_a }, { peril_type: SimpleDanger2, level: level_b })
-          | ({ peril_type: ComplexDanger2, level: level_a }, { peril_type: ComplexDanger2, level:  level_b }) => compare (level_a, level_b)
-          | ({ peril_type: Creature2, _ }, _ ) => (-1)
-          | ({ peril_type: SimpleDanger2, _ }, { peril_type: Creature2, _ }) => 1
-          | ({ peril_type: SimpleDanger2, _ }, { peril_type: ComplexDanger2, _ }) => (-1)
-          | ({ peril_type: ComplexDanger2, _ },_ ) => 1
-      };
-  });
 type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
-type encounter2= {perils2: Map.t(peril2, int, PerilComparator2.identity)};
-
 
 let newEncounter: encounter = {
   perils: Map.make(~id=(module PerilComparator)),
 };
 
-let newEncounter2: encounter2 = {
-  perils2: Map.make(~id=(module PerilComparator2)),
-};
 let containing = (encounter: encounter, peril: peril, number: int): encounter => {
-  {perils: encounter.perils->Map.set(peril, number) };
+  {perils: encounter.perils->Map.set(peril, number)};
 };
 
-let containing2 = (encounter2: encounter2, peril2: peril2, number: int): encounter2 => {
-  {perils2: encounter2.perils2->Map.set(peril2, number) };
-};
 let reduce =
     (encounter: encounter, accumulator: 'a, f: ('a, peril, int) => 'a): 'a => {
   encounter.perils->Map.reduce(accumulator, f);
 };
 
-let reduce2 =
-    (encounter2: encounter2, accumulator: 'a, f: ('a, peril2, int) => 'a): 'a => {
-  encounter2.perils2->Map.reduce(accumulator, f);
-};
 let perilLevel = (peril: peril) =>
   switch (peril) {
   | SimpleDanger(level) => level
@@ -81,10 +61,8 @@ let perilLevel = (peril: peril) =>
   };
 
 type chooser = list(peril) => option(peril);
-type chooser2 = list(peril2) => option(peril2);
 
 let pickRandom = (perils: list(peril)) => head(shuffle(perils));
-let pickRandom2 = (perils2: list(peril2)) => head(shuffle(perils2));
 
 let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
@@ -100,19 +78,6 @@ let experiencePoints = (~encounter: encounter) => {
   );
 };
 
-let experiencePointForPeril2 = (peril2: peril2) => {
-  switch (peril2) {
-  | { peril_type: SimpleDanger2, level: GroupLevelMinus1 } => 6
-  | { peril_type: SimpleDanger2, level: GroupLevel } => 8
-  | { peril_type: Creature2, _ }
-  | { peril_type: ComplexDanger2, _ } => 40
-  };
-};
-let experiencePoints2 = (~encounter2: encounter2) => {
-  Map.reduce(encounter2.perils2, 0, (acc, p, n) =>
-    acc + n * experiencePointForPeril2(p)
-  );
-};
 let increment = (value: option(int)): option(int) =>
   switch (value) {
   | None => Some(1)
@@ -123,9 +88,6 @@ let upToGoal = (perils: list(peril), goal: int): list(peril) => {
   keep(perils, p => experiencePointForPeril(p) <= goal);
 };
 
-let upToGoal2 = (perils2: list(peril2), goal: int): list(peril2) => {
-  keep(perils2, p => experiencePointForPeril2(p) <= goal);
-};
 exception TODO(string);
 
 let todo = (message: string) => raise(TODO(message));
@@ -153,28 +115,6 @@ let rec addPeril =
     building;
   };
 
-let rec addPeril2 =
-        (
-          chooser2: chooser2,
-          perils2: list(peril2),
-          building: Map.t(peril2, int, PerilComparator2.identity),
-          goal: int,
-        )
-        : Map.t(peril2, int, PerilComparator2.identity) =>
-  if (goal > 0) {
-    switch (chooser2(perils2->upToGoal2(goal))) {
-    | None => building->Map.update( { peril_type: SimpleDanger2, level: GroupLevelMinus1 }, increment)
-    | Some(peril2) =>
-      addPeril2(
-        chooser2,
-        perils2,
-        building->Map.update(peril2, increment),
-        goal - experiencePointForPeril2(peril2),
-      )
-    };
-  } else {
-    building;
-  };
 let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter => {
   let perils =
     addPeril(
@@ -183,18 +123,7 @@ let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter =>
       Map.make(~id=(module PerilComparator)),
       80,
     );
-  {perils: perils };
-};
-
-let generateEncounter2 = (~chooser2: chooser2, ~perils2: array(peril2)): encounter2 => {
-  let perils2 =
-    addPeril2(
-      chooser2,
-      fromArray(perils2),
-      Map.make(~id=(module PerilComparator2)),
-      80,
-    );
-  {perils2: perils2 };
+  {perils: perils};
 };
 
 let possiblePerils = [|
