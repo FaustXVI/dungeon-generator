@@ -72,11 +72,14 @@ describe("Encounter Generator", () => {
     });
     [
       aPeril(Creature, GroupLevel),
-      aPeril(Creature, GroupLevelMinus1),
       aPeril(SimpleDanger, GroupLevel),
-      aPeril(SimpleDanger, GroupLevelMinus1),
       aPeril(ComplexDanger, GroupLevel),
+      aPeril(Creature, GroupLevelMinus1),
+      aPeril(SimpleDanger, GroupLevelMinus1),
       aPeril(ComplexDanger, GroupLevelMinus1),
+      aPeril(Creature, GroupLevelPlus1),
+      aPeril(SimpleDanger, GroupLevelPlus1),
+      aPeril(ComplexDanger, GroupLevelPlus1),
     ]
     ->List.forEach(peril => {
         test(

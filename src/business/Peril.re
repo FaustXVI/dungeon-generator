@@ -5,7 +5,7 @@ type level =
   | GroupLevelMinus1
   | GroupLevel;
 
-let levels = [GroupLevel, GroupLevelMinus1];
+let levels = [GroupLevel, GroupLevelMinus1, GroupLevelPlus1];
 
 type perilType =
   | Creature
