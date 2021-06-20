@@ -4,10 +4,14 @@ type level =
   | GroupLevelMinus1
   | GroupLevel;
 
+let levels = [GroupLevel, GroupLevelMinus1];
+
 type perilType =
   | Creature
   | SimpleDanger
   | ComplexDanger;
+
+let perilTypes = [Creature, SimpleDanger, ComplexDanger];
 
 type peril = {
   perilType,

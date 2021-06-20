@@ -76,10 +76,10 @@ describe("Encounter Generator", () => {
       expect(possiblePerils)
       |> toEqual([|
            aPeril(Creature, GroupLevel),
-           aPeril(SimpleDanger, GroupLevel),
-           aPeril(ComplexDanger, GroupLevel),
-           aPeril(SimpleDanger, GroupLevelMinus1),
            aPeril(Creature, GroupLevelMinus1),
+           aPeril(SimpleDanger, GroupLevel),
+           aPeril(SimpleDanger, GroupLevelMinus1),
+           aPeril(ComplexDanger, GroupLevel),
            aPeril(ComplexDanger, GroupLevelMinus1),
          |])
     });

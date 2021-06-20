@@ -52,11 +52,11 @@ let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter =>
   {perils: perils};
 };
 
-let possiblePerils = [|
-  aPeril(Creature, GroupLevel),
-  aPeril(SimpleDanger, GroupLevel),
-  aPeril(ComplexDanger, GroupLevel),
-  aPeril(SimpleDanger, GroupLevelMinus1),
-  aPeril(Creature, GroupLevelMinus1),
-  aPeril(ComplexDanger, GroupLevelMinus1),
-|];
+let possiblePerils =
+  toArray(
+    flatten(
+      map(perilTypes, perilType => {
+        map(levels, level => {aPeril(perilType, level)})
+      }),
+    ),
+  );
