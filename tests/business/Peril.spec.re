@@ -4,6 +4,7 @@ open Expect;
 open Peril;
 open Encounter;
 open StringRenderer;
+open PerilExperiencePointsTable;
 
 module EncounterComparator =
   Id.MakeComparable({
@@ -34,23 +35,11 @@ describe("Encounter Generator", () => {
       })
   });
   describe("experience points for peril", () => {
-    [
-      (Creature, GroupLevel, 40),
-      (ComplexDanger, GroupLevel, 40),
-      (SimpleDanger, GroupLevel, 8),
-      (SimpleDanger, GroupLevelMinus1, 6),
-      (Creature, GroupLevelMinus1, 30),
-      (ComplexDanger, GroupLevelMinus1, 30),
-      (SimpleDanger, GroupLevelPlus1, 12),
-      (Creature, GroupLevelPlus1, 60),
-      (ComplexDanger, GroupLevelPlus1, 60),
-    ]
-    ->List.forEach(((perilType, level, expectedExperience)) => {
-        test(
-          "experience points for " ++ render(aPeril(perilType, level)), () => {
-          expect(experiencePointForPeril(aPeril(perilType, level)))
-          |> toEqual(expectedExperience)
-        })
+    perilExperiencePointsTable->List.forEach(((peril, expectedExperience)) => {
+      test("experience points for " ++ render(peril), () => {
+        expect(experiencePointForPeril(peril))
+        |> toEqual(expectedExperience)
       })
+    })
   });
 });

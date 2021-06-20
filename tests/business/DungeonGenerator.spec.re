@@ -4,6 +4,7 @@ open Expect;
 open DungeonGenerator;
 open Peril;
 open Encounter;
+open PerilExperiencePointsTable;
 
 module EncounterComparator =
   Id.MakeComparable({
@@ -70,24 +71,13 @@ describe("Encounter Generator", () => {
         |> toEqual(tenSimpleDangers);
       });
     });
-    [
-      aPeril(Creature, GroupLevel),
-      aPeril(SimpleDanger, GroupLevel),
-      aPeril(ComplexDanger, GroupLevel),
-      aPeril(Creature, GroupLevelMinus1),
-      aPeril(SimpleDanger, GroupLevelMinus1),
-      aPeril(ComplexDanger, GroupLevelMinus1),
-      aPeril(Creature, GroupLevelPlus1),
-      aPeril(SimpleDanger, GroupLevelPlus1),
-      aPeril(ComplexDanger, GroupLevelPlus1),
-    ]
-    ->List.forEach(peril => {
-        test(
-          "possible perils at a minimum all the combinations of peril type with level",
-          () => {
-          expect(possiblePerils) |> toContainEqual(peril)
-        })
-      });
+    perilTable->List.forEach(peril => {
+      test(
+        "possible perils at a minimum all the combinations of peril type with level",
+        () => {
+        expect(possiblePerils) |> toContainEqual(peril)
+      })
+    });
   });
 
   describe("acceptance tests", () => {
