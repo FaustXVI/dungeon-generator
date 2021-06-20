@@ -31,6 +31,14 @@ let perilTypeOf = (peril: peril): perilType => {
   };
 };
 
+let levelOf = (peril: peril): level => {
+  switch (peril) {
+  | Creature(lvl)
+  | SimpleDanger(lvl)
+  | ComplexDanger(lvl) => lvl
+  };
+};
+
 module PerilComparator =
   Id.MakeComparable({
     type t = peril;

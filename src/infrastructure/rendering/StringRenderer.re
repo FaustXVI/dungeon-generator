@@ -1,12 +1,20 @@
 open DungeonGenerator;
 
-let render = (peril: peril): string => {
-  switch (peril) {
-  | Creature(GroupLevel) => "Creature at group level"
-  | SimpleDanger(GroupLevel) => "Simple Danger at group level"
-  | ComplexDanger(GroupLevel) => "Complex Danger at group level"
-  | Creature(GroupLevelMinus1) => "Creature -1"
-  | SimpleDanger(GroupLevelMinus1) => "Simple Danger -1"
-  | ComplexDanger(GroupLevelMinus1) => "Complex Danger -1"
+let renderPerilType = (perilType: perilType): string => {
+  switch (perilType) {
+  | Creature => "Creature"
+  | SimpleDanger => "Simple Danger"
+  | ComplexDanger => "Complex Danger"
   };
+};
+
+let renderLevel = (level: level): string => {
+  switch (level) {
+  | GroupLevel => "at group level"
+  | GroupLevelMinus1 => "-1"
+  };
+};
+
+let render = (peril: peril): string => {
+  renderPerilType(perilTypeOf(peril)) ++ " " ++ renderLevel(levelOf(peril));
 };
