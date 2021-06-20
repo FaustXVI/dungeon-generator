@@ -52,48 +52,6 @@ describe("Encounter Generator", () => {
   });
   describe("experience points", () => {
     test(
-      "experience points of an encounter with 1 creature only is 40 points", () => {
-      expect(
-        experiencePoints(
-          newEncounter->containing(aPeril(Creature, GroupLevel), 1),
-        ),
-      )
-      |> toEqual(40)
-    });
-    test(
-      "experience points of an encounter with 1 complex danger only is 40 points",
-      () => {
-      expect(
-        experiencePoints(
-          newEncounter->containing(aPeril(ComplexDanger, GroupLevel), 1),
-        ),
-      )
-      |> toEqual(40)
-    });
-    test(
-      "experience points of an encounter with 1 simple danger  only is 8 points",
-      () => {
-      expect(
-        experiencePoints(
-          newEncounter->containing(aPeril(SimpleDanger, GroupLevel), 1),
-        ),
-      )
-      |> toEqual(8)
-    });
-    test(
-      "experience points of an encounter with 1 simple danger level -1 only is 6 points",
-      () => {
-      expect(
-        experiencePoints(
-          newEncounter->containing(
-            aPeril(SimpleDanger, GroupLevelMinus1),
-            1,
-          ),
-        ),
-      )
-      |> toEqual(6)
-    });
-    test(
       "experience points of an encounter with 2 simple danger only is 16 points",
       () => {
       expect(
