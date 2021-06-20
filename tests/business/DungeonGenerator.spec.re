@@ -5,6 +5,7 @@ open DungeonGenerator;
 open Peril;
 open Encounter;
 open PerilsDescription;
+open TODO;
 
 module EncounterComparator =
   Id.MakeComparable({
@@ -57,18 +58,19 @@ describe("Encounter Generator", () => {
         "can generate a moderate encounter with a bit more XP than necessary",
         () => {
         let pickFirst = alist => List.head(alist);
-        let tenSimpleDangers =
+        let expectedDangers =
           newEncounter->containing(
             aPeril(SimpleDanger, GroupLevelMinus1),
             14,
           );
+        todo("Ce test est désormais insuffisant");
         expect(
           generateEncounter(
             ~perils=[|aPeril(SimpleDanger, GroupLevelMinus1)|],
             ~chooser=pickFirst,
           ),
         )
-        |> toEqual(tenSimpleDangers);
+        |> toEqual(expectedDangers);
       });
     });
     perilTable->List.forEach(peril => {
