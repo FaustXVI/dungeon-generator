@@ -70,19 +70,21 @@ describe("Encounter Generator", () => {
         |> toEqual(tenSimpleDangers);
       });
     });
-    test(
-      "possible perils at a minimum all the combinations of peril type with level",
-      () => {
-      expect(possiblePerils)
-      |> toEqual([|
-           aPeril(Creature, GroupLevel),
-           aPeril(Creature, GroupLevelMinus1),
-           aPeril(SimpleDanger, GroupLevel),
-           aPeril(SimpleDanger, GroupLevelMinus1),
-           aPeril(ComplexDanger, GroupLevel),
-           aPeril(ComplexDanger, GroupLevelMinus1),
-         |])
-    });
+    [
+      aPeril(Creature, GroupLevel),
+      aPeril(Creature, GroupLevelMinus1),
+      aPeril(SimpleDanger, GroupLevel),
+      aPeril(SimpleDanger, GroupLevelMinus1),
+      aPeril(ComplexDanger, GroupLevel),
+      aPeril(ComplexDanger, GroupLevelMinus1),
+    ]
+    ->List.forEach(peril => {
+        test(
+          "possible perils at a minimum all the combinations of peril type with level",
+          () => {
+          expect(possiblePerils) |> toContainEqual(peril)
+        })
+      });
   });
 
   describe("acceptance tests", () => {
