@@ -49,17 +49,6 @@ describe("Encounter Generator", () => {
       )
       |> toEqual(5)
     });
-    test("encounter can map peril to number of perils", () => {
-      let encounter =
-        newEncounter
-        ->containing(aPeril(SimpleDanger, GroupLevelMinus1), 1)
-        ->containing(aPeril(SimpleDanger, GroupLevel), 20)
-        ->containing(aPeril(ComplexDanger, GroupLevel), 4000)
-        ->containing(aPeril(ComplexDanger, GroupLevelMinus1), 300)
-        ->containing(aPeril(Creature, GroupLevelMinus1), 50000)
-        ->containing(aPeril(Creature, GroupLevel), 600000);
-      expect(encounter->reduce(0, (a, _, i) => a + i)) |> toEqual(654321);
-    });
   });
   describe("experience points", () => {
     test(
