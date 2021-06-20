@@ -10,8 +10,9 @@ let renderPerilType = (perilType: perilType): string => {
 
 let renderLevel = (level: level): string => {
   switch (level) {
-  | GroupLevel => "at group level"
+  | GroupLevelMinus2 => "-2"
   | GroupLevelMinus1 => "-1"
+  | GroupLevel => "at group level"
   | GroupLevelPlus1 => "+1"
   };
 };

@@ -3,7 +3,6 @@ open Belt;
 open Expect;
 open Peril;
 open Encounter;
-open StringRenderer;
 open PerilExperiencePointsTable;
 
 module EncounterComparator =
@@ -35,9 +34,10 @@ describe("Encounter Generator", () => {
       })
   });
   describe("experience points for peril", () => {
-    perilExperiencePointsTable->List.forEach(((peril, expectedExperience)) => {
-      test("experience points for " ++ render(peril), () => {
-        expect(experiencePointForPeril(peril))
+    allPerilDescriptions->List.forEach(
+      ((perilType, level, label, expectedExperience)) => {
+      test("experience points for " ++ label, () => {
+        expect(experiencePointForPeril(aPeril(perilType, level)))
         |> toEqual(expectedExperience)
       })
     })
