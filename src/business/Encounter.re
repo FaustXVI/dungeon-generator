@@ -15,3 +15,9 @@ let reduce =
     (encounter: encounter, accumulator: 'a, f: ('a, peril, int) => 'a): 'a => {
   encounter.perils->Map.reduce(accumulator, f);
 };
+
+let experiencePoints = (~encounter: encounter) => {
+  Map.reduce(encounter.perils, 0, (acc, p, n) =>
+    acc + n * experiencePointForPeril(p)
+  );
+};

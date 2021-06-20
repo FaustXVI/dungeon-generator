@@ -35,3 +35,12 @@ module PerilComparator =
       | x => x
       };
   });
+
+let experiencePointForPeril = (peril: peril) => {
+  switch (peril) {
+  | {perilType: SimpleDanger, level: GroupLevelMinus1} => 6
+  | {perilType: SimpleDanger, level: GroupLevel} => 8
+  | {perilType: Creature, _}
+  | {perilType: ComplexDanger, _} => 40
+  };
+};

@@ -7,20 +7,6 @@ type chooser = list(peril) => option(peril);
 
 let pickRandom = (perils: list(peril)) => head(shuffle(perils));
 
-let experiencePointForPeril = (peril: peril) => {
-  switch (peril) {
-  | {perilType: SimpleDanger, level: GroupLevelMinus1} => 6
-  | {perilType: SimpleDanger, level: GroupLevel} => 8
-  | {perilType: Creature, _}
-  | {perilType: ComplexDanger, _} => 40
-  };
-};
-let experiencePoints = (~encounter: encounter) => {
-  Map.reduce(encounter.perils, 0, (acc, p, n) =>
-    acc + n * experiencePointForPeril(p)
-  );
-};
-
 let increment = (value: option(int)): option(int) =>
   switch (value) {
   | None => Some(1)
