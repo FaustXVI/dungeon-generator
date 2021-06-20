@@ -27,10 +27,10 @@ describe("Encounter Generator", () => {
           ->reduce("", (acc, p, n) =>
               acc
               ++ (
-                switch (p) {
-                | Creature(_) => "Creature"
-                | SimpleDanger(_) => "Simple Danger"
-                | ComplexDanger(_) => "Complex Danger"
+                switch (perilTypeOf(p)) {
+                | Creature => "Creature"
+                | SimpleDanger => "Simple Danger"
+                | ComplexDanger => "Complex Danger"
                 }
               )
               ++ " "
