@@ -58,7 +58,7 @@ let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
   | {perilType: SimpleDanger, level} =>
     experiencePointsForSimpleDanger(level)
-  | {perilType: _, level} =>
+  | {perilType: Creature | ComplexDanger, level} =>
     experiencePointsForCreatureAndComplexDanger(level)
   };
 };
