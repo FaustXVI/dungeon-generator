@@ -12,6 +12,7 @@ let renderLevel = (level: level): string => {
   switch (level) {
   | GroupLevel => "at group level"
   | GroupLevelMinus1 => "-1"
+  | GroupLevelPlus1 => "+1"
   };
 };
 

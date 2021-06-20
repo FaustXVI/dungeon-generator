@@ -12,9 +12,10 @@ describe("String renderer", () => {
     (aPeril(Creature, GroupLevelMinus1), "Creature -1"),
     (aPeril(SimpleDanger, GroupLevelMinus1), "Simple Danger -1"),
     (aPeril(ComplexDanger, GroupLevelMinus1), "Complex Danger -1"),
+    (aPeril(Creature, GroupLevelPlus1), "Creature +1"),
   ]
   ->forEach(((peril, label)) => {
-      test("provide a string for any peril value", () => {
+      test("provide a string for any peril value " ++ label, () => {
         expect(render(peril)) |> toEqual(label)
       })
     })

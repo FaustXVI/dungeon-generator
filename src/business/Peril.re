@@ -1,6 +1,7 @@
 open Belt;
 
 type level =
+  | GroupLevelPlus1
   | GroupLevelMinus1
   | GroupLevel;
 
@@ -44,6 +45,7 @@ let experiencePointsForSimpleDanger = (level: level) => {
   switch (level) {
   | GroupLevel => 8
   | GroupLevelMinus1 => 6
+  | GroupLevelPlus1 => 12
   };
 };
 
@@ -51,6 +53,7 @@ let experiencePointsForCreatureAndComplexDanger = (level: level) => {
   switch (level) {
   | GroupLevel => 40
   | GroupLevelMinus1 => 30
+  | GroupLevelPlus1 => 60
   };
 };
 
