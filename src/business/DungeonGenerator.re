@@ -17,10 +17,6 @@ let upToGoal = (perils: list(peril), goal: int): list(peril) => {
   keep(perils, p => experiencePointForPeril(p) <= goal);
 };
 
-exception TODO(string);
-
-let todo = (message: string) => raise(TODO(message));
-
 let rec addPeril =
         (
           chooser: chooser,
