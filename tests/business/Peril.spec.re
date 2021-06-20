@@ -39,6 +39,7 @@ describe("Encounter Generator", () => {
       (ComplexDanger, GroupLevel, 40),
       (SimpleDanger, GroupLevel, 8),
       (SimpleDanger, GroupLevelMinus1, 6),
+      (Creature, GroupLevelMinus1, 30),
     ]
     ->List.forEach(((perilType, level, expectedExperience)) => {
         test(
