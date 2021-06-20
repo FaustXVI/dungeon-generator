@@ -10,47 +10,30 @@ type perilType =
   | SimpleDanger
   | ComplexDanger;
 
-type peril =
-  | Creature(level)
-  | SimpleDanger(level)
-  | ComplexDanger(level);
+type peril = {
+  perilType,
+  level,
+};
 
 let aPeril = (perilType: perilType, level: level): peril => {
-  switch (perilType) {
-  | Creature => Creature(level)
-  | SimpleDanger => SimpleDanger(level)
-  | ComplexDanger => ComplexDanger(level)
-  };
+  {perilType, level};
 };
 
 let perilTypeOf = (peril: peril): perilType => {
-  switch (peril) {
-  | Creature(_) => Creature
-  | SimpleDanger(_) => SimpleDanger
-  | ComplexDanger(_) => ComplexDanger
-  };
+  peril.perilType;
 };
 
 let levelOf = (peril: peril): level => {
-  switch (peril) {
-  | Creature(lvl)
-  | SimpleDanger(lvl)
-  | ComplexDanger(lvl) => lvl
-  };
+  peril.level;
 };
 
 module PerilComparator =
   Id.MakeComparable({
     type t = peril;
     let cmp = (a: peril, b: peril) =>
-      switch (a, b) {
-      | (Creature(lvla), Creature(lvlb))
-      | (SimpleDanger(lvla), SimpleDanger(lvlb))
-      | (ComplexDanger(lvla), ComplexDanger(lvlb)) => compare(lvla, lvlb)
-      | (Creature(_), _) => (-1)
-      | (SimpleDanger(_), Creature(_)) => 1
-      | (SimpleDanger(_), ComplexDanger(_)) => (-1)
-      | (ComplexDanger(_), _) => 1
+      switch (compare(perilTypeOf(a), perilTypeOf(b))) {
+      | 0 => compare(levelOf(a), levelOf(b))
+      | x => x
       };
   });
 
@@ -69,12 +52,7 @@ let reduce =
   encounter.perils->Map.reduce(accumulator, f);
 };
 
-let perilLevel = (peril: peril) =>
-  switch (peril) {
-  | SimpleDanger(level) => level
-  | ComplexDanger(level) => level
-  | Creature(level) => level
-  };
+let perilLevel = (peril: peril) => levelOf(peril);
 
 type chooser = list(peril) => option(peril);
 
@@ -82,10 +60,10 @@ let pickRandom = (perils: list(peril)) => head(shuffle(perils));
 
 let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
-  | SimpleDanger(GroupLevelMinus1) => 6
-  | SimpleDanger(GroupLevel) => 8
-  | Creature(_)
-  | ComplexDanger(_) => 40
+  | {perilType: SimpleDanger, level: GroupLevelMinus1} => 6
+  | {perilType: SimpleDanger, level: GroupLevel} => 8
+  | {perilType: Creature, _}
+  | {perilType: ComplexDanger, _} => 40
   };
 };
 let experiencePoints = (~encounter: encounter) => {
@@ -118,7 +96,8 @@ let rec addPeril =
         : Map.t(peril, int, PerilComparator.identity) =>
   if (goal > 0) {
     switch (chooser(perils->upToGoal(goal))) {
-    | None => building->Map.update(SimpleDanger(GroupLevelMinus1), increment)
+    | None =>
+      building->Map.update(aPeril(SimpleDanger, GroupLevelMinus1), increment)
     | Some(peril) =>
       addPeril(
         chooser,
