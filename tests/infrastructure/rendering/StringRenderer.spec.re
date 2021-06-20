@@ -2,7 +2,7 @@ open Jest;
 open Expect;
 open StringRenderer;
 open Belt.List;
-open DungeonGenerator;
+open Peril;
 
 describe("String renderer", () => {
   [

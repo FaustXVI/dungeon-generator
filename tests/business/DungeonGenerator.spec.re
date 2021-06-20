@@ -2,6 +2,7 @@ open Jest;
 open Belt;
 open Expect;
 open DungeonGenerator;
+open Peril;
 
 module EncounterComparator =
   Id.MakeComparable({

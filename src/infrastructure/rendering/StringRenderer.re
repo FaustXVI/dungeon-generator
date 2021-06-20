@@ -1,4 +1,4 @@
-open DungeonGenerator;
+open Peril;
 
 let renderPerilType = (perilType: perilType): string => {
   switch (perilType) {
