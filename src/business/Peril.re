@@ -44,7 +44,8 @@ let experiencePointForPeril = (peril: peril) => {
   switch (peril) {
   | {perilType: SimpleDanger, level: GroupLevelMinus1} => 6
   | {perilType: SimpleDanger, level: GroupLevel} => 8
-  | {perilType: Creature, level: GroupLevelMinus1} => 30
+  | {perilType: Creature, level: GroupLevelMinus1}
+  | {perilType: ComplexDanger, level: GroupLevelMinus1} => 30
   | {perilType: Creature, level: GroupLevel}
   | {perilType: ComplexDanger, _} => 40
   };
