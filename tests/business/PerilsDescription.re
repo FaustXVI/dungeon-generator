@@ -25,6 +25,9 @@ let allPerilDescriptions: List.t((perilType, level, string, int)) = [
   (SimpleDanger, GroupLevelPlus3, "Simple Danger +3", 24),
   (Creature, GroupLevelPlus3, "Creature +3", 120),
   (ComplexDanger, GroupLevelPlus3, "Complex Danger +3", 120),
+  (SimpleDanger, GroupLevelPlus4, "Simple Danger +4", 32),
+  (Creature, GroupLevelPlus4, "Creature +4", 160),
+  (ComplexDanger, GroupLevelPlus4, "Complex Danger +4", 160),
 ];
 
 let perilTable =

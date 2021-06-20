@@ -18,6 +18,7 @@ let renderLevel = (level: level): string => {
   | GroupLevelPlus1 => "+1"
   | GroupLevelPlus2 => "+2"
   | GroupLevelPlus3 => "+3"
+  | GroupLevelPlus4 => "+4"
   };
 };
 
