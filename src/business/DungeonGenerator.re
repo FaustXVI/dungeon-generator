@@ -52,8 +52,6 @@ let reduce =
   encounter.perils->Map.reduce(accumulator, f);
 };
 
-let perilLevel = (peril: peril) => levelOf(peril);
-
 type chooser = list(peril) => option(peril);
 
 let pickRandom = (perils: list(peril)) => head(shuffle(perils));

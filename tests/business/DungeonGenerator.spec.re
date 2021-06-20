@@ -115,15 +115,13 @@ describe("Encounter Generator", () => {
       [GroupLevel, GroupLevelMinus1]
       ->List.forEach(level => {
           test("gives a simple danger's level", () => {
-            expect(perilLevel(aPeril(SimpleDanger, level)))
-            |> toEqual(level)
+            expect(levelOf(aPeril(SimpleDanger, level))) |> toEqual(level)
           });
           test("gives a complex danger's level", () => {
-            expect(perilLevel(aPeril(ComplexDanger, level)))
-            |> toEqual(level)
+            expect(levelOf(aPeril(ComplexDanger, level))) |> toEqual(level)
           });
           test("gives a creature's level", () => {
-            expect(perilLevel(aPeril(Creature, level))) |> toEqual(level)
+            expect(levelOf(aPeril(Creature, level))) |> toEqual(level)
           });
         })
     });
@@ -220,7 +218,7 @@ describe("Encounter Generator", () => {
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
             generateEncounter(~perils=possiblePerils, ~chooser=pickRandom)
-            ->reduce([], (acc, p, _) => List.add(acc, perilLevel(p)))
+            ->reduce([], (acc, p, _) => List.add(acc, levelOf(p)))
             ->List.toArray
           )
         ->Array.concatMany;
