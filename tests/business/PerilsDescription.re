@@ -1,6 +1,9 @@
 open Belt;
 open Peril;
 let allPerilDescriptions: List.t((perilType, level, string, int)) = [
+  (SimpleDanger, GroupLevelMinus4, "Simple Danger -4", 2),
+  (Creature, GroupLevelMinus4, "Creature -4", 10),
+  (ComplexDanger, GroupLevelMinus4, "Complex Danger -4", 10),
   (SimpleDanger, GroupLevelMinus3, "Simple Danger -3", 3),
   (Creature, GroupLevelMinus3, "Creature -3", 15),
   (ComplexDanger, GroupLevelMinus3, "Complex Danger -3", 15),
