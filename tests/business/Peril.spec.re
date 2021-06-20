@@ -3,7 +3,7 @@ open Belt;
 open Expect;
 open Peril;
 open Encounter;
-open PerilExperiencePointsTable;
+open PerilsDescription;
 
 module EncounterComparator =
   Id.MakeComparable({

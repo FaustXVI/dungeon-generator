@@ -4,7 +4,7 @@ open Expect;
 open DungeonGenerator;
 open Peril;
 open Encounter;
-open PerilExperiencePointsTable;
+open PerilsDescription;
 
 module EncounterComparator =
   Id.MakeComparable({

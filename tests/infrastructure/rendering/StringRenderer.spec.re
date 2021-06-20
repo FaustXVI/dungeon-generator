@@ -2,7 +2,7 @@ open Jest;
 open Expect;
 open StringRenderer;
 open Belt.List;
-open PerilExperiencePointsTable;
+open PerilsDescription;
 
 describe("String renderer", () => {
   perilLabelsTable->forEach(((peril, label)) => {
