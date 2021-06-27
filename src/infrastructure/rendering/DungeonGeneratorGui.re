@@ -2,32 +2,46 @@ open Belt;
 open DungeonGenerator;
 open Encounter;
 
-type state = option(encounter);
+type state = {
+  budget: int,
+  encounter: option(encounter),
+};
 
 type action =
-  | Generate(int);
+  | BudgetChange(int)
+  | Generate;
 
-let generateNewEncounter = budget =>
+let generateNewEncounter = budget => {
   Some(
     generateEncounter(~perils=possiblePerils, ~chooser=pickRandom, ~budget),
   );
+};
 
-let initialState = None;
+let initialState = {budget: 80, encounter: None};
 
-let reducer = (_: state, action: action): state => {
+let reducer = (state: state, action: action): state => {
   switch (action) {
-  | Generate(budget) => generateNewEncounter(budget)
+  | Generate => {
+      budget: state.budget,
+      encounter: generateNewEncounter(state.budget),
+    }
+  | BudgetChange(budget) => {budget, encounter: None}
   };
 };
 
 [@react.component]
 let make = () => {
   let (state, dispatch) = React.useReducer(reducer, initialState);
+  let onChange = (e: ReactEvent.Form.t): unit => {
+    let value = e->ReactEvent.Form.target##value;
+    dispatch(BudgetChange(value));
+  };
   <div>
-    <button onClick={_event => dispatch(Generate(80))}>
+    <input type_="number" value={string_of_int(state.budget)} onChange />
+    <button onClick={_event => dispatch(Generate)}>
       {React.string("Generate")}
     </button>
-    {switch (state) {
+    {switch (state.encounter) {
      | None => React.string("")
      | Some(encounter) =>
        <ul>
