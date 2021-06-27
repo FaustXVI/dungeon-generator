@@ -9,7 +9,11 @@ type action =
 
 let initialState = {
   generatedAdventure:
-    generateEncounter(~perils=possiblePerils, ~chooser=pickRandom),
+    generateEncounter(
+      ~perils=possiblePerils,
+      ~chooser=pickRandom,
+      ~budget=80,
+    ),
 };
 
 let reducer = (_, s, _) => {

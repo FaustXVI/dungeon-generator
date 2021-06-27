@@ -27,8 +27,7 @@ let rec addPeril =
         : Map.t(peril, int, PerilComparator.identity) =>
   if (goal > 0) {
     switch (chooser(perils->upToGoal(goal))) {
-    | None =>
-      building->Map.update(smallestPeril(perils), increment)
+    | None => building->Map.update(smallestPeril(perils), increment)
     | Some(peril) =>
       addPeril(
         chooser,
@@ -41,13 +40,14 @@ let rec addPeril =
     building;
   };
 
-let generateEncounter = (~chooser: chooser, ~perils: array(peril)): encounter => {
+let generateEncounter =
+    (~chooser: chooser, ~perils: array(peril), ~budget: int): encounter => {
   let perils =
     addPeril(
       chooser,
       fromArray(perils),
       Map.make(~id=(module PerilComparator)),
-      80,
+      budget,
     );
   {perils: perils};
 };

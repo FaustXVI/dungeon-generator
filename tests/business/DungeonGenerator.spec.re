@@ -27,6 +27,7 @@ describe("Encounter Generator", () => {
           generateEncounter(
             ~perils=[|aPeril(Creature, GroupLevel)|],
             ~chooser=pickRandom,
+            ~budget=80,
           ),
         )
         |> toEqual(
@@ -47,6 +48,7 @@ describe("Encounter Generator", () => {
                 aPeril(Creature, GroupLevel),
               |],
               ~chooser=pickFirst,
+              ~budget=80,
             ),
           )
           |> toEqual(tenSimpleDangers);
@@ -66,6 +68,7 @@ describe("Encounter Generator", () => {
           generateEncounter(
             ~perils=[|aPeril(SimpleDanger, GroupLevelMinus1)|],
             ~chooser=pickFirst,
+            ~budget=80,
           ),
         )
         |> toEqual(expectedDangers);
@@ -74,17 +77,23 @@ describe("Encounter Generator", () => {
       test(
         "can generate a moderate encounter with a bit more XP than necessary minimizing XP addition",
         () => {
-        let pickFirst = alist => List.head(alist);
-        let expectedDangers =
-        newEncounter->containing(aPeril(Creature, GroupLevelPlus1),1)
-        ->containing(aPeril(SimpleDanger, GroupLevelPlus1), 2);
-        let result = generateEncounter(
-                    ~perils=[|aPeril(Creature, GroupLevelPlus1),aPeril(SimpleDanger, GroupLevelPlus1)|],
-                    ~chooser=pickFirst,
-                    );
-        expect(result)
-        |> toEqual(expectedDangers);
-        });
+          let pickFirst = alist => List.head(alist);
+          let expectedDangers =
+            newEncounter
+            ->containing(aPeril(Creature, GroupLevelPlus1), 1)
+            ->containing(aPeril(SimpleDanger, GroupLevelPlus1), 2);
+          let result =
+            generateEncounter(
+              ~perils=[|
+                aPeril(Creature, GroupLevelPlus1),
+                aPeril(SimpleDanger, GroupLevelPlus1),
+              |],
+              ~chooser=pickFirst,
+              ~budget=80,
+            );
+          expect(result) |> toEqual(expectedDangers);
+        },
+      );
     });
     perilTable->List.forEach(peril => {
       test(
@@ -98,7 +107,11 @@ describe("Encounter Generator", () => {
   describe("acceptance tests", () => {
     test("moderate encounter represents 80 experience points", () => {
       let encounter =
-        generateEncounter(~perils=possiblePerils, ~chooser=pickRandom);
+        generateEncounter(
+          ~perils=possiblePerils,
+          ~chooser=pickRandom,
+          ~budget=80,
+        );
       let result = experiencePoints(encounter);
       expect(result >= 80 && result <= 86) |> toBe(true);
     });
@@ -107,7 +120,11 @@ describe("Encounter Generator", () => {
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
-            generateEncounter(~perils=possiblePerils, ~chooser=pickRandom)
+            generateEncounter(
+              ~perils=possiblePerils,
+              ~chooser=pickRandom,
+              ~budget=80,
+            )
           );
       let set = Set.fromArray(encounters, ~id=(module EncounterComparator));
 
@@ -118,7 +135,11 @@ describe("Encounter Generator", () => {
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
-            generateEncounter(~perils=possiblePerils, ~chooser=pickRandom)
+            generateEncounter(
+              ~perils=possiblePerils,
+              ~chooser=pickRandom,
+              ~budget=80,
+            )
             ->reduce([], (acc, p, _) => List.add(acc, levelOf(p)))
             ->List.toArray
           )
