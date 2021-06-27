@@ -1,4 +1,5 @@
 open Belt;
+open TODO;
 
 type level =
   | GroupLevelMinus4
@@ -92,4 +93,14 @@ let experiencePointForPeril = (peril: peril) => {
   | {perilType: Creature | ComplexDanger, level} =>
     experiencePointsForCreatureAndComplexDanger(level)
   };
+};
+
+let smallestPeril = (perils: list(peril)) : peril => {
+    let cmp = (a: peril, b: peril) =>
+        experiencePointForPeril(a) - experiencePointForPeril(b);
+    let sortedPerils = List.sort(perils,cmp);
+    switch(List.head(sortedPerils)) {
+        | None => todo("unexpected condition: empty peril list")
+        | Some(p) => p
+    };
 };

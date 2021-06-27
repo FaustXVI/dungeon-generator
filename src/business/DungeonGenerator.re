@@ -28,7 +28,7 @@ let rec addPeril =
   if (goal > 0) {
     switch (chooser(perils->upToGoal(goal))) {
     | None =>
-      building->Map.update(aPeril(SimpleDanger, GroupLevelMinus1), increment)
+      building->Map.update(smallestPeril(perils), increment)
     | Some(peril) =>
       addPeril(
         chooser,
