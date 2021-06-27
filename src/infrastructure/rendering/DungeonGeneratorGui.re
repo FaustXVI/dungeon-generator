@@ -5,22 +5,18 @@ open Encounter;
 type state = option(encounter);
 
 type action =
-  | Generate;
+  | Generate(int);
 
-let generateNewEncounter = () =>
+let generateNewEncounter = budget =>
   Some(
-    generateEncounter(
-      ~perils=possiblePerils,
-      ~chooser=pickRandom,
-      ~budget=80,
-    ),
+    generateEncounter(~perils=possiblePerils, ~chooser=pickRandom, ~budget),
   );
 
 let initialState = None;
 
 let reducer = (_: state, action: action): state => {
   switch (action) {
-  | Generate => generateNewEncounter()
+  | Generate(budget) => generateNewEncounter(budget)
   };
 };
 
@@ -28,7 +24,7 @@ let reducer = (_: state, action: action): state => {
 let make = () => {
   let (state, dispatch) = React.useReducer(reducer, initialState);
   <div>
-    <button onClick={_event => dispatch(Generate)}>
+    <button onClick={_event => dispatch(Generate(80))}>
       {React.string("Generate")}
     </button>
     {switch (state) {
