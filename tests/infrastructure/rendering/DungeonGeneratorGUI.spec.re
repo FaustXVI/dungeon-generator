@@ -10,17 +10,11 @@ describe("My basic test", () => {
 
   test("can render DOM elements", () => {
     let container = getContainer(refContainer);
-    act(() => {
-      ReactDOMRe.render(
-        <DungeonGeneratorGui randomInt={_ => 10} />,
-        container,
-      )
-    });
-      let content = querySelector(container, "[data-testid='dungeon']");
-      switch (content) {
-      | None => fail("dungeon should be defined")
-      | Some(_) => pass
-      };
+    act(() => {ReactDOMRe.render(<DungeonGeneratorGui />, container)});
+    let content = querySelector(container, "[data-testid='dungeon']");
+    switch (content) {
+    | None => fail("dungeon should be defined")
+    | Some(_) => pass
+    };
   });
-
 });

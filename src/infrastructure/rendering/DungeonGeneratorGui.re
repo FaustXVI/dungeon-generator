@@ -2,33 +2,44 @@ open Belt;
 open DungeonGenerator;
 open Encounter;
 
-type state = {generatedAdventure: encounter};
+type state = option(encounter);
 
 type action =
   | Generate;
 
-let initialState = {
-  generatedAdventure:
+let generateNewEncounter = () =>
+  Some(
     generateEncounter(
       ~perils=possiblePerils,
       ~chooser=pickRandom,
       ~budget=80,
     ),
-};
+  );
 
-let reducer = (_, s, _) => {
-  s;
+let initialState = None;
+
+let reducer = (_: state, action: action): state => {
+  switch (action) {
+  | Generate => generateNewEncounter()
+  };
 };
 
 [@react.component]
-let make = (~randomInt=Random.int) => {
-  let (state, _) = React.useReducer(reducer(randomInt), initialState);
+let make = () => {
+  let (state, dispatch) = React.useReducer(reducer, initialState);
   <div>
-    {<ul>
-       {StringRenderer.renderEncounter(state.generatedAdventure)
-        ->Array.map(s => <li key=s> {React.string(s)} </li>)
-        ->React.array}
-     </ul>
-     ->TestId.testId(~testId="dungeon")}
+    <button onClick={_event => dispatch(Generate)}>
+      {React.string("Generate")}
+    </button>
+    {switch (state) {
+     | None => React.string("")
+     | Some(encounter) =>
+       <ul>
+         {StringRenderer.renderEncounter(encounter)
+          ->Array.map(s => <li key=s> {React.string(s)} </li>)
+          ->React.array}
+       </ul>
+       ->TestId.testId(~testId="dungeon")
+     }}
   </div>;
 };
