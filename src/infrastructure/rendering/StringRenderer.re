@@ -1,4 +1,6 @@
 open Peril;
+open Encounter;
+open Belt;
 
 let renderPerilType = (perilType: perilType): string => {
   switch (perilType) {
@@ -24,4 +26,11 @@ let renderLevel = (level: level): string => {
 
 let render = (peril: peril): string => {
   renderPerilType(perilTypeOf(peril)) ++ " " ++ renderLevel(levelOf(peril));
+};
+
+let renderEncounter = (encounter: encounter): array(string) => {
+  Encounter.reduce(encounter, [], (acc, p, n) =>
+    acc->List.add(string_of_int(n) ++ " " ++ render(p))
+  )
+  ->List.toArray;
 };
