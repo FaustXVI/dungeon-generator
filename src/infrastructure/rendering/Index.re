@@ -7,4 +7,4 @@ let makeContainer = () => {
   container;
 };
 
-ReactDOMRe.render(<DungeonGeneratorGui />, makeContainer());
+ReactDOM.render(<DungeonGeneratorGui />, makeContainer());

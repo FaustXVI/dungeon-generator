@@ -2,33 +2,30 @@
   "name": "my-react-app",
   "version": "0.1.0",
   "scripts": {
-    "build": "bsb -make-world",
-    "start": "bsb -make-world -w -ws _ ",
-    "clean": "bsb -clean-world",
+    "build": "rescript build -with-deps",
+    "start": "rescript -w _ ",
+    "clean": "rescript -clean-world",
     "server": "moduleserve ./ --port 8000",
     "test": "npm run build && jest",
     "build-production": "npm run build && webpack"
   },
   "keywords": [
-    "BuckleScript",
     "ReasonReact",
     "reason-react"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@rescript/react": "^0.10.3",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "reason-react": ">=0.7.1",
+    "rescript": "^9.1.4",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.7.0",
-    "bs-jest-dom": "^4.1.1",
-    "bs-platform": "^9.0.2",
     "bs-react-testing-library": "^0.8.0",
-    "bs-webapi": "^0.19.1",
     "moduleserve": "^0.9.0"
   }
 }

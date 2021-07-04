@@ -49,7 +49,6 @@ let make = () => {
           ->Array.map(s => <li key=s> {React.string(s)} </li>)
           ->React.array}
        </ul>
-       ->TestId.testId(~testId="dungeon")
      }}
   </div>;
 };

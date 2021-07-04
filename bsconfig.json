@@ -27,13 +27,10 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
-    "reason-react"
+    "@rescript/react"
   ],
   "bs-dev-dependencies": [
     "@glennsl/bs-jest",
-    "bs-webapi",
-    "bs-jest-dom",
-    "bs-react-testing-library"
   ],
   "warnings": {
     "number": "+A-42-6-48-20",
