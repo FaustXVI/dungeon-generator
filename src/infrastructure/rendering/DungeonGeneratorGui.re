@@ -34,8 +34,8 @@ let reducer = (state: state, action: action): state => {
     }
   | SetDifficulty(difficulty) => {
     switch(experiencePointsForPredefinedDifficulty(difficulty)) {
-    | Some(budget) => {...state, budget:budget, isCustom:false }
-    | None => {...state, isCustom:true }
+    | Some(budget) => {...state, budget:budget, encounter: None, isCustom:false }
+    | None => {...state, encounter: None, isCustom:true }
     }
   }
   | BudgetChange(budget) => {...state, budget: budget, encounter: None}
