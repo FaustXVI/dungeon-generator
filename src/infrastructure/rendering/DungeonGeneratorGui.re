@@ -2,15 +2,17 @@ open Belt;
 open DungeonGenerator;
 open Encounter;
 
+
 type state = {
   budget: int,
+  difficulty: difficulty,
   isCustom: bool,
   encounter: option(encounter),
 };
 
 type action =
   | BudgetChange(int)
-  | SetCustom(bool)
+  | SetDifficulty(difficulty)
   | Generate;
 
 let generateNewEncounter = budget => {
@@ -19,7 +21,7 @@ let generateNewEncounter = budget => {
   );
 };
 
-let initialState = {budget: 80, isCustom: false, encounter: None};
+let initialState = {budget: 80, difficulty: Moderate, isCustom: false, encounter: None};
 
 let reducer = (state: state, action: action): state => {
   switch (action) {
@@ -27,7 +29,12 @@ let reducer = (state: state, action: action): state => {
       ...state,
       encounter: generateNewEncounter(state.budget),
     }
-  | SetCustom(isCustom) => {...state, isCustom:isCustom }
+  | SetDifficulty(difficulty) => {
+    switch(difficulty) {
+    | Moderate => {...state, budget:80, isCustom:false }
+    | Custom => {...state, isCustom:true }
+    }
+  }
   | BudgetChange(budget) => {...state, budget: budget, encounter: None}
   };
 };
@@ -42,11 +49,10 @@ let make = () => {
   let onSelect = (e: ReactEvent.Form.t): unit => {
     let value = e->ReactEvent.Form.target##value;
     if (value == "moderate") {
-        dispatch(BudgetChange(80));
-        dispatch(SetCustom(false));
+        dispatch(SetDifficulty(Moderate))
     }
     else {
-        dispatch(SetCustom(true))
+        dispatch(SetDifficulty(Custom))
     }
   };
   <div>

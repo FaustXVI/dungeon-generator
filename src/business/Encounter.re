@@ -1,6 +1,8 @@
 open Belt;
 open Peril;
 
+type difficulty = Moderate | Custom;
+
 type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
 
 let newEncounter: encounter = {
