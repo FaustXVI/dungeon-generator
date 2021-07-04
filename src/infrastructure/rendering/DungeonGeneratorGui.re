@@ -36,11 +36,22 @@ let make = () => {
     let value = e->ReactEvent.Form.target##value;
     dispatch(BudgetChange(value));
   };
+  let onSelect = (e: ReactEvent.Form.t): unit => {
+    let value = e->ReactEvent.Form.target##value;
+    if (value == "moderate") {
+        dispatch(BudgetChange(80));
+    }
+  };
   <div>
+    <select name="difficulty" onChange=onSelect>
+        <option value="moderate">{React.string("Moderate")}</option>
+        <option value="custom">{React.string("Custom")}</option>
+      </select>
     <input type_="number" value={string_of_int(state.budget)} onChange />
     <button onClick={_event => dispatch(Generate)}>
       {React.string("Generate")}
     </button>
+
     {switch (state.encounter) {
      | None => React.string("")
      | Some(encounter) =>

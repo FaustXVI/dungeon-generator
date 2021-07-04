@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "rescript build -with-deps",
-    "start": "rescript -w _ ",
+    "start": "rescript build -w",
     "clean": "rescript -clean-world",
     "server": "moduleserve ./ --port 8000",
     "test": "npm run build && jest",
