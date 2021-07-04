@@ -63,7 +63,7 @@ let make = () => {
    </select>
 
     {if (state.isCustom) {<input type_="number" value={string_of_int(state.budget)} onChange />}
-    else React.string("")
+    else React.null
     }
     <button onClick={_event => dispatch(Generate)}>
       {React.string("Generate")}
