@@ -91,4 +91,20 @@ describe("Encounter Generator", () => {
         }
     )
   })
+  describe("string value of difficulty", () => {
+    test("Weak", () => {
+        expect(difficultyToString(Weak)) |> toEqual("Weak")
+    });
+    test("Moderate", () => {
+        expect(difficultyToString(Moderate)) |> toEqual("Moderate")
+    });
+    test("Custom", () => {
+        expect(difficultyToString(Custom)) |> toEqual("Custom")
+    });
+  })
+  describe("difficulty value form string", () => {
+    test("Weak", () => {
+        expect(difficultyFromString("Weak")) |> toEqual(Weak)
+    })
+  })
 });

@@ -51,18 +51,16 @@ let make = () => {
   };
   let onSelect = (e: ReactEvent.Form.t): unit => {
     let value = e->ReactEvent.Form.target##value;
-    switch(value) {
-    | "weak" => dispatch(SetDifficulty(Weak))
-    | "moderate" => dispatch(SetDifficulty(Moderate))
-    | _ => dispatch(SetDifficulty(Custom))
-    }
+    let difficulty = difficultyFromString(value);
+    dispatch(SetDifficulty(difficulty))
   };
   <div>
     <select name="difficulty" onChange=onSelect>
-        <option value="weak">{React.string("Weak")}</option>
-        <option value="moderate" selected=true>{React.string("Moderate")}</option>
-        <option value="custom">{React.string("Custom")}</option>
-      </select>
+        { React.array(Belt.Array.map([|Weak, Moderate, Custom|], difficulty =>
+            {<option value=difficultyToString(difficulty) selected={difficulty==state.difficulty}>{React.string(difficultyToString(difficulty))}</option>}
+            ))
+        }
+   </select>
 
     {if (state.isCustom) {<input type_="number" value={string_of_int(state.budget)} onChange />}
     else React.string("")

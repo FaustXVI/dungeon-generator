@@ -31,3 +31,20 @@ let experiencePointsForPredefinedDifficulty = (difficulty: difficulty): option(i
     | Custom => None
     }
 };
+
+let difficultyToString = (difficulty: difficulty): string => {
+    switch(difficulty) {
+    | Weak => "Weak"
+    | Moderate => "Moderate"
+    | Custom => "Custom"
+    }
+}
+
+// switch to an Option output type
+let difficultyFromString = (string: string): difficulty => {
+    switch(string) {
+    | "Weak" => Weak
+    | "Moderate" => Moderate
+    | _ => Custom
+    }
+}
