@@ -55,12 +55,18 @@ let make = () => {
         dispatch(SetDifficulty(Moderate))
     }
     else {
-        dispatch(SetDifficulty(Custom))
+        if(value == "weak") {
+            dispatch(SetDifficulty(Weak))
+        }
+        else {
+            dispatch(SetDifficulty(Custom))
+        }
     }
   };
   <div>
     <select name="difficulty" onChange=onSelect>
-        <option value="moderate">{React.string("Moderate")}</option>
+        <option value="weak">{React.string("Weak")}</option>
+        <option value="moderate" selected=true>{React.string("Moderate")}</option>
         <option value="custom">{React.string("Custom")}</option>
       </select>
 

@@ -81,8 +81,13 @@ describe("Encounter Generator", () => {
         }
     )
     test(
-        "custom is undefied", () => {
+        "custom is undefined", () => {
         expect(experiencePointsForPredefinedDifficulty(Custom)) |> toEqual(None)
+        }
+    )
+    test(
+        "weak is 60", () => {
+        expect(experiencePointsForPredefinedDifficulty(Weak)) |> toEqual(Some(60))
         }
     )
   })

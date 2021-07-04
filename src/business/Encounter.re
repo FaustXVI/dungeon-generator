@@ -1,7 +1,7 @@
 open Belt;
 open Peril;
 
-type difficulty = Moderate | Custom;
+type difficulty = Weak | Moderate | Custom;
 
 type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
 
@@ -25,10 +25,9 @@ let experiencePoints = (~encounter: encounter) => {
 };
 
 let experiencePointsForPredefinedDifficulty = (difficulty: difficulty): option(int) => {
-    if(difficulty == Moderate) {
-    Some(80)
-    }
-    else {
-        None
+    switch(difficulty) {
+    | Weak => Some(60)
+    | Moderate => Some(80)
+    | Custom => None
     }
 };
