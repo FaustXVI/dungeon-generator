@@ -51,16 +51,10 @@ let make = () => {
   };
   let onSelect = (e: ReactEvent.Form.t): unit => {
     let value = e->ReactEvent.Form.target##value;
-    if (value == "moderate") {
-        dispatch(SetDifficulty(Moderate))
-    }
-    else {
-        if(value == "weak") {
-            dispatch(SetDifficulty(Weak))
-        }
-        else {
-            dispatch(SetDifficulty(Custom))
-        }
+    switch(value) {
+    | "weak" => dispatch(SetDifficulty(Weak))
+    | "moderate" => dispatch(SetDifficulty(Moderate))
+    | _ => dispatch(SetDifficulty(Custom))
     }
   };
   <div>
