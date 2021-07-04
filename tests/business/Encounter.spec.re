@@ -74,4 +74,16 @@ describe("Encounter Generator", () => {
       |> toEqual(48)
     });
   });
+  describe("predefined difficulty experience points", () => {
+    test(
+        "moderate is 80", () => {
+        expect(experiencePointsForPredefinedDifficulty(Moderate)) |> toEqual(Some(80))
+        }
+    )
+    test(
+        "custom is undefied", () => {
+        expect(experiencePointsForPredefinedDifficulty(Custom)) |> toEqual(None)
+        }
+    )
+  })
 });

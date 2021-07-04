@@ -23,3 +23,12 @@ let experiencePoints = (~encounter: encounter) => {
     acc + n * experiencePointForPeril(p)
   );
 };
+
+let experiencePointsForPredefinedDifficulty = (difficulty: difficulty): option(int) => {
+    if(difficulty == Moderate) {
+    Some(80)
+    }
+    else {
+        None
+    }
+};

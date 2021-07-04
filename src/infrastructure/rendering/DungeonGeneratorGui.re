@@ -21,7 +21,10 @@ let generateNewEncounter = budget => {
   );
 };
 
-let initialState = {budget: 80, difficulty: Moderate, isCustom: false, encounter: None};
+let initialState = { budget: Option.getWithDefault(experiencePointsForPredefinedDifficulty(Moderate),80)
+                   , difficulty: Moderate
+                   , isCustom: false
+                   , encounter: None};
 
 let reducer = (state: state, action: action): state => {
   switch (action) {
@@ -30,9 +33,9 @@ let reducer = (state: state, action: action): state => {
       encounter: generateNewEncounter(state.budget),
     }
   | SetDifficulty(difficulty) => {
-    switch(difficulty) {
-    | Moderate => {...state, budget:80, isCustom:false }
-    | Custom => {...state, isCustom:true }
+    switch(experiencePointsForPredefinedDifficulty(difficulty)) {
+    | Some(budget) => {...state, budget:budget, isCustom:false }
+    | None => {...state, isCustom:true }
     }
   }
   | BudgetChange(budget) => {...state, budget: budget, encounter: None}
