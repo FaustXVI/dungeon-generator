@@ -92,23 +92,12 @@ describe("Encounter Generator", () => {
       |> toEqual(Some(40))
     });
   });
-  describe("string value of difficulty", () => {
-    test("Weak", () => {
-      expect(difficultyToString(Weak)) |> toEqual("Weak")
-    });
-    test("Moderate", () => {
-      expect(difficultyToString(Moderate)) |> toEqual("Moderate")
-    });
-    test("Trivial", () => {
-      expect(difficultyToString(Trivial)) |> toEqual("Trivial")
-    });
-    test("Custom", () => {
-      expect(difficultyToString(Custom)) |> toEqual("Custom")
-    });
-  });
-  describe("difficulty value form string", () => {
-    test("Weak", () => {
-      expect(difficultyFromString("Weak")) |> toEqual(Weak)
+  describe("difficulties", () => {
+    test("as strings", () => {
+      expect(
+        Js.Array.joinWith(" ", difficulties->Array.map(difficultyToString)),
+      )
+      |> toEqual("Trivial Weak Moderate Custom")
     })
   });
   describe("difficulty can be converted from and to string", () => {
