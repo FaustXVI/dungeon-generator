@@ -113,10 +113,9 @@ describe("Encounter Generator", () => {
           ~budget=80,
         );
       let result = experiencePoints(encounter);
-      expect(result >= 80 && result <= 86) |> toBe(true);
+      expect(result >= 80 && result <= 81) |> toBe(true);
     });
     test("two moderate encounters are potentially distinct", () => {
-      // generate a dozen of encouters (with a fixed seed)
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
@@ -131,7 +130,6 @@ describe("Encounter Generator", () => {
       expect(Set.size(set)) |> toBeGreaterThan(1);
     });
     test("two moderate encounters may contain different peril level", () => {
-      // generate a dozen of encouters (with a fixed seed)
       let encounters =
         [|1, 2, 3, 4, 5, 6, 7, 8, 9, 10|]
         ->Array.map(_ =>
