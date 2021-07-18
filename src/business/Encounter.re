@@ -55,7 +55,6 @@ let difficultyToString = (difficulty: difficulty): string => {
   };
 };
 
-// switch to an Option output type
 let difficultyFromString = (string: string): difficulty => {
   switch (string) {
   | "Trivial" => Trivial
