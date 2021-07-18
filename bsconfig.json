@@ -20,17 +20,19 @@
   ],
   "package-specs": [
     {
-      "module": "commonjs",
+      "module": "es6",
       "in-source": false
     }
   ],
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
-    "@rescript/react"
+    "@rescript/react",
+    "rescript-material-ui",
+    "rescript-material-ui-lab"
   ],
   "bs-dev-dependencies": [
-    "@glennsl/bs-jest",
+    "@glennsl/bs-jest"
   ],
   "warnings": {
     "number": "+A-42-6-48-20",

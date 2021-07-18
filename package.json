@@ -5,7 +5,7 @@
     "build": "rescript build -with-deps",
     "start": "rescript build -w",
     "clean": "rescript -clean-world",
-    "server": "moduleserve ./ --port 8000",
+    "server": "parcel serve index.html",
     "test": "npm run build && jest",
     "build-production": "npm run build && webpack"
   },
@@ -16,10 +16,16 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^4.12.1",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
     "@rescript/react": "^0.10.3",
+    "parcel": "^2.0.0-beta.2",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "rescript": "^9.1.4",
+    "rescript-material-ui": "^2.1.2",
+    "rescript-material-ui-lab": "^2.1.2",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },

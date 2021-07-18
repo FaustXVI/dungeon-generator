@@ -36,8 +36,8 @@ let reducer = (state: state, action: action): state => {
   | Generate => {...state, encounter: generateNewEncounter(state.budget)}
   | SetDifficulty(difficulty) =>
     switch (experiencePointsForPredefinedDifficulty(difficulty)) {
-    | Some(budget) => {...state, budget, encounter: None, isCustom: false}
-    | None => {...state, encounter: None, isCustom: true}
+    | Some(budget) => {difficulty, budget, encounter: None, isCustom: false}
+    | None => {...state, difficulty, encounter: None, isCustom: true}
     }
   | BudgetChange(budget) => {...state, budget, encounter: None}
   };
@@ -46,35 +46,48 @@ let reducer = (state: state, action: action): state => {
 [@react.component]
 let make = () => {
   let (state, dispatch) = React.useReducer(reducer, initialState);
+  Js.log(state);
   let onChange = (e: ReactEvent.Form.t): unit => {
     let value = e->ReactEvent.Form.target##value;
     dispatch(BudgetChange(value));
   };
-  let onSelect = (e: ReactEvent.Form.t): unit => {
+  let onSelect = (e: ReactEvent.Form.t, _r: Js.t('a)): unit => {
     let value = e->ReactEvent.Form.target##value;
     let difficulty = difficultyFromString(value);
+    Js.log(difficulty);
     dispatch(SetDifficulty(difficulty));
   };
   <div>
-    <select name="difficulty" onChange=onSelect>
+    <MaterialUi_Select
+      value={MaterialUi_Select.Value.string(
+        difficultyToString(state.difficulty),
+      )}
+      name="difficulty"
+      onChange=onSelect>
       {React.array(
          Belt.Array.map(difficulties, difficulty => {
-           <option
-             value={difficultyToString(difficulty)}
-             selected={difficulty == state.difficulty}>
+           <MaterialUi_MenuItem
+             value={MaterialUi_MenuItem.Value.string(
+               difficultyToString(difficulty),
+             )}>
              {React.string(difficultyToString(difficulty))}
-           </option>
+           </MaterialUi_MenuItem>
          }),
        )}
-    </select>
+    </MaterialUi_Select>
     {if (state.isCustom) {
-       <input type_="number" value={string_of_int(state.budget)} onChange />;
+       <MaterialUi_TextField
+         _type="number"
+         value={MaterialUi_TextField.Value.int(state.budget)}
+         onChange
+       />;
      } else {
        React.null;
      }}
-    <button onClick={_event => dispatch(Generate)}>
+    <MaterialUi_Button
+      variant=`Contained onClick={_event => dispatch(Generate)}>
       {React.string("Generate")}
-    </button>
+    </MaterialUi_Button>
     {switch (state.encounter) {
      | None => React.string("")
      | Some(encounter) =>
