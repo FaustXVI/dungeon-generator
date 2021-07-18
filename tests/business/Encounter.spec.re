@@ -74,35 +74,19 @@ describe("Encounter Generator", () => {
       |> toEqual(48)
     });
   });
-  describe("predefined difficulty experience points", () => {
-    test("trivial is 40", () => {
-      expect(experiencePointsForPredefinedDifficulty(Trivial))
-      |> toEqual(Some(40))
-    });
-    test("weak is 60", () => {
-      expect(experiencePointsForPredefinedDifficulty(Weak))
-      |> toEqual(Some(60))
-    });
-    test("moderate is 80", () => {
-      expect(experiencePointsForPredefinedDifficulty(Moderate))
-      |> toEqual(Some(80))
-    });
-    test("serious is 120", () => {
-      expect(experiencePointsForPredefinedDifficulty(Serious))
-      |> toEqual(Some(120))
-    });
-    test("custom is undefined", () => {
-      expect(experiencePointsForPredefinedDifficulty(Custom))
-      |> toEqual(None)
-    });
-  });
   describe("difficulties", () => {
     test("as strings", () => {
       expect(
         Js.Array.joinWith(" ", difficulties->Array.map(difficultyToString)),
       )
       |> toEqual("Trivial Weak Moderate Serious Custom")
-    })
+    });
+    test("has predefined experiences points except custom", () => {
+      expect(
+        difficulties->Array.map(experiencePointsForPredefinedDifficulty),
+      )
+      |> toEqual([|Some(40), Some(60), Some(80), Some(120), None|])
+    });
   });
   describe("difficulty can be converted from and to string", () => {
     difficulties->Array.forEach(difficulty => {
