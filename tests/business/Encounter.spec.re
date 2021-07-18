@@ -79,13 +79,20 @@ describe("Encounter Generator", () => {
       expect(
         Js.Array.joinWith(" ", difficulties->Array.map(difficultyToString)),
       )
-      |> toEqual("Trivial Weak Moderate Serious Custom")
+      |> toEqual("Trivial Weak Moderate Serious Extreme Custom")
     });
     test("has predefined experiences points except custom", () => {
       expect(
         difficulties->Array.map(experiencePointsForPredefinedDifficulty),
       )
-      |> toEqual([|Some(40), Some(60), Some(80), Some(120), None|])
+      |> toEqual([|
+           Some(40),
+           Some(60),
+           Some(80),
+           Some(120),
+           Some(160),
+           None,
+         |])
     });
   });
   describe("difficulty can be converted from and to string", () => {
