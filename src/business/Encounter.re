@@ -5,9 +5,10 @@ type difficulty =
   | Trivial
   | Weak
   | Moderate
+  | Serious
   | Custom;
 
-let difficulties = [|Trivial, Weak, Moderate, Custom|];
+let difficulties = [|Trivial, Weak, Moderate, Serious, Custom|];
 
 type encounter = {perils: Map.t(peril, int, PerilComparator.identity)};
 
@@ -36,6 +37,7 @@ let experiencePointsForPredefinedDifficulty =
   | Trivial => Some(40)
   | Weak => Some(60)
   | Moderate => Some(80)
+  | Serious => Some(120)
   | Custom => None
   };
 };
@@ -45,6 +47,7 @@ let difficultyToString = (difficulty: difficulty): string => {
   | Trivial => "Trivial"
   | Weak => "Weak"
   | Moderate => "Moderate"
+  | Serious => "Serious"
   | Custom => "Custom"
   };
 };
@@ -55,6 +58,7 @@ let difficultyFromString = (string: string): difficulty => {
   | "Trivial" => Trivial
   | "Weak" => Weak
   | "Moderate" => Moderate
+  | "Serious" => Serious
   | _ => Custom
   };
 };

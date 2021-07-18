@@ -75,21 +75,25 @@ describe("Encounter Generator", () => {
     });
   });
   describe("predefined difficulty experience points", () => {
-    test("moderate is 80", () => {
-      expect(experiencePointsForPredefinedDifficulty(Moderate))
-      |> toEqual(Some(80))
-    });
-    test("custom is undefined", () => {
-      expect(experiencePointsForPredefinedDifficulty(Custom))
-      |> toEqual(None)
+    test("trivial is 40", () => {
+      expect(experiencePointsForPredefinedDifficulty(Trivial))
+      |> toEqual(Some(40))
     });
     test("weak is 60", () => {
       expect(experiencePointsForPredefinedDifficulty(Weak))
       |> toEqual(Some(60))
     });
-    test("trivial is 40", () => {
-      expect(experiencePointsForPredefinedDifficulty(Trivial))
-      |> toEqual(Some(40))
+    test("moderate is 80", () => {
+      expect(experiencePointsForPredefinedDifficulty(Moderate))
+      |> toEqual(Some(80))
+    });
+    test("serious is 120", () => {
+      expect(experiencePointsForPredefinedDifficulty(Serious))
+      |> toEqual(Some(120))
+    });
+    test("custom is undefined", () => {
+      expect(experiencePointsForPredefinedDifficulty(Custom))
+      |> toEqual(None)
     });
   });
   describe("difficulties", () => {
@@ -97,7 +101,7 @@ describe("Encounter Generator", () => {
       expect(
         Js.Array.joinWith(" ", difficulties->Array.map(difficultyToString)),
       )
-      |> toEqual("Trivial Weak Moderate Custom")
+      |> toEqual("Trivial Weak Moderate Serious Custom")
     })
   });
   describe("difficulty can be converted from and to string", () => {
