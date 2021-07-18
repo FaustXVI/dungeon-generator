@@ -75,36 +75,48 @@ describe("Encounter Generator", () => {
     });
   });
   describe("predefined difficulty experience points", () => {
-    test(
-        "moderate is 80", () => {
-        expect(experiencePointsForPredefinedDifficulty(Moderate)) |> toEqual(Some(80))
-        }
-    )
-    test(
-        "custom is undefined", () => {
-        expect(experiencePointsForPredefinedDifficulty(Custom)) |> toEqual(None)
-        }
-    )
-    test(
-        "weak is 60", () => {
-        expect(experiencePointsForPredefinedDifficulty(Weak)) |> toEqual(Some(60))
-        }
-    )
-  })
+    test("moderate is 80", () => {
+      expect(experiencePointsForPredefinedDifficulty(Moderate))
+      |> toEqual(Some(80))
+    });
+    test("custom is undefined", () => {
+      expect(experiencePointsForPredefinedDifficulty(Custom))
+      |> toEqual(None)
+    });
+    test("weak is 60", () => {
+      expect(experiencePointsForPredefinedDifficulty(Weak))
+      |> toEqual(Some(60))
+    });
+    test("trivial is 40", () => {
+      expect(experiencePointsForPredefinedDifficulty(Trivial))
+      |> toEqual(Some(40))
+    });
+  });
   describe("string value of difficulty", () => {
     test("Weak", () => {
-        expect(difficultyToString(Weak)) |> toEqual("Weak")
+      expect(difficultyToString(Weak)) |> toEqual("Weak")
     });
     test("Moderate", () => {
-        expect(difficultyToString(Moderate)) |> toEqual("Moderate")
+      expect(difficultyToString(Moderate)) |> toEqual("Moderate")
+    });
+    test("Trivial", () => {
+      expect(difficultyToString(Trivial)) |> toEqual("Trivial")
     });
     test("Custom", () => {
-        expect(difficultyToString(Custom)) |> toEqual("Custom")
+      expect(difficultyToString(Custom)) |> toEqual("Custom")
     });
-  })
+  });
   describe("difficulty value form string", () => {
     test("Weak", () => {
-        expect(difficultyFromString("Weak")) |> toEqual(Weak)
+      expect(difficultyFromString("Weak")) |> toEqual(Weak)
     })
-  })
+  });
+  describe("difficulty can be converted from and to string", () => {
+    difficulties->Array.forEach(difficulty => {
+      test("for " ++ difficultyToString(difficulty), () => {
+        expect(difficultyFromString(difficultyToString(difficulty)))
+        |> toEqual(difficulty)
+      })
+    })
+  });
 });
