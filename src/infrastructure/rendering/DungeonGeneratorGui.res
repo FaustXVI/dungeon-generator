@@ -49,40 +49,46 @@ let make = () => {
     let difficulty = difficultyFromString(value)
     dispatch(SetDifficulty(difficulty))
   }
-  <div>
-    <MaterialUi_Select
-      value={MaterialUi_Select.Value.string(difficultyToString(state.difficulty))}
-      name="difficulty"
-      onChange=onDifficultySelect>
-      {React.array(
-        Belt.Array.map(difficulties, difficulty => {
-          <MaterialUi_MenuItem
-            value={MaterialUi_MenuItem.Value.string(difficultyToString(difficulty))}>
-            {React.string(difficultyToString(difficulty))}
-          </MaterialUi_MenuItem>
-        }),
-      )}
-    </MaterialUi_Select>
-    {if state.isCustom {
-      <MaterialUi_TextField
-        _type="number"
-        value={MaterialUi_TextField.Value.int(state.budget)}
-        onChange=onCustomBudgetChange
-      />
-    } else {
-      React.null
-    }}
-    <MaterialUi_Button variant=#Contained onClick={_event => dispatch(Generate)}>
-      {React.string("Generate")}
-    </MaterialUi_Button>
-    {switch state.encounter {
-    | None => React.null
-    | Some(encounter) =>
-      <ul>
-        {StringRenderer.renderEncounter(encounter)
-        ->Array.map(s => <li key=s> {React.string(s)} </li>)
-        ->React.array}
-      </ul>
-    }}
-  </div>
+  <MaterialUi_Grid container={true}>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <MaterialUi_Select
+        value={MaterialUi_Select.Value.string(difficultyToString(state.difficulty))}
+        name="difficulty"
+        onChange=onDifficultySelect>
+        {React.array(
+          Belt.Array.map(difficulties, difficulty => {
+            <MaterialUi_MenuItem
+              value={MaterialUi_MenuItem.Value.string(difficultyToString(difficulty))}>
+              {React.string(difficultyToString(difficulty))}
+            </MaterialUi_MenuItem>
+          }),
+        )}
+      </MaterialUi_Select>
+      {if state.isCustom {
+        <MaterialUi_TextField
+          _type="number"
+          value={MaterialUi_TextField.Value.int(state.budget)}
+          onChange=onCustomBudgetChange
+        />
+      } else {
+        React.null
+      }}
+    </MaterialUi_Grid>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <MaterialUi_Button variant=#Contained color={#Primary} onClick={_event => dispatch(Generate)}>
+        {React.string("Generate")}
+      </MaterialUi_Button>
+    </MaterialUi_Grid>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      {switch state.encounter {
+      | None => React.null
+      | Some(encounter) =>
+        <ul>
+          {StringRenderer.renderEncounter(encounter)
+          ->Array.map(s => <li key=s> {React.string(s)} </li>)
+          ->React.array}
+        </ul>
+      }}
+    </MaterialUi_Grid>
+  </MaterialUi_Grid>
 }
