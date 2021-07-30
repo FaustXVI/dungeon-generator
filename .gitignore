@@ -9,3 +9,4 @@ bundleOutput
 js
 \.*
 result
+dist
