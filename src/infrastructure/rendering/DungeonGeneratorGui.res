@@ -40,22 +40,20 @@ let reducer = (state: state, action: action): state => {
 @react.component
 let make = () => {
   let (state, dispatch) = React.useReducer(reducer, initialState)
-  Js.log(state)
-  let onChange = (e: ReactEvent.Form.t): unit => {
+  let onCustomBudgetChange = (e: ReactEvent.Form.t): unit => {
     let value = ReactEvent.Form.target(e)["value"]
     dispatch(BudgetChange(value))
   }
-  let onSelect = (e: ReactEvent.Form.t, _r: Js.t<'a>): unit => {
+  let onDifficultySelect = (e: ReactEvent.Form.t, _r: Js.t<'a>): unit => {
     let value = ReactEvent.Form.target(e)["value"]
     let difficulty = difficultyFromString(value)
-    Js.log(difficulty)
     dispatch(SetDifficulty(difficulty))
   }
   <div>
     <MaterialUi_Select
       value={MaterialUi_Select.Value.string(difficultyToString(state.difficulty))}
       name="difficulty"
-      onChange=onSelect>
+      onChange=onDifficultySelect>
       {React.array(
         Belt.Array.map(difficulties, difficulty => {
           <MaterialUi_MenuItem
@@ -67,7 +65,9 @@ let make = () => {
     </MaterialUi_Select>
     {if state.isCustom {
       <MaterialUi_TextField
-        _type="number" value={MaterialUi_TextField.Value.int(state.budget)} onChange
+        _type="number"
+        value={MaterialUi_TextField.Value.int(state.budget)}
+        onChange=onCustomBudgetChange
       />
     } else {
       React.null
@@ -76,7 +76,7 @@ let make = () => {
       {React.string("Generate")}
     </MaterialUi_Button>
     {switch state.encounter {
-    | None => React.string("")
+    | None => React.null
     | Some(encounter) =>
       <ul>
         {StringRenderer.renderEncounter(encounter)
