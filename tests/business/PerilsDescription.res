@@ -1,6 +1,6 @@
-open Belt;
-open Peril;
-let allPerilDescriptions: List.t((perilType, level, string, int)) = [
+open Belt
+open Peril
+let allPerilDescriptions: List.t<(perilType, level, string, int)> = list{
   (SimpleDanger, GroupLevelMinus4, "Simple Danger -4", 2),
   (Creature, GroupLevelMinus4, "Creature -4", 10),
   (ComplexDanger, GroupLevelMinus4, "Complex Danger -4", 10),
@@ -28,12 +28,10 @@ let allPerilDescriptions: List.t((perilType, level, string, int)) = [
   (SimpleDanger, GroupLevelPlus4, "Simple Danger +4", 32),
   (Creature, GroupLevelPlus4, "Creature +4", 160),
   (ComplexDanger, GroupLevelPlus4, "Complex Danger +4", 160),
-];
+}
 
-let perilTable =
-  allPerilDescriptions->List.map(((p, l, _, _)) => {aPeril(p, l)});
+let perilTable = allPerilDescriptions->List.map(((p, l, _, _)) => {aPeril(p, l)})
 
-let perilLabelsTable =
-  allPerilDescriptions->List.map(((p, l, label, _)) => {
-    (aPeril(p, l), label)
-  });
+let perilLabelsTable = allPerilDescriptions->List.map(((p, l, label, _)) => {
+  (aPeril(p, l), label)
+})
