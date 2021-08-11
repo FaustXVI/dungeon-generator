@@ -1,7 +1,7 @@
 with import ./nix/channel.nix;
 let
   dependencies = import ./nix/dependencies.nix;
-  nodeDependencies = (pkgs.callPackage ./nix/composition.nix {inherit pkgs system nodejs;}).package;
+#  nodeDependencies = (pkgs.callPackage ./nix/composition.nix {inherit pkgs system nodejs;}).package;
   #{
 
   #      # Fix paths so we can use a cached Ninja, instead of compiling it
@@ -16,15 +16,17 @@ let
     nodeModules = stdenv.mkDerivation {
       name = "dungeon-generator";
       buildInputs = dependencies.devTools;
-      src = nix-gitignore.gitignoreSource [] ./. ;
+      #src = nix-gitignore.gitignoreSource [] ./. ;
+      src =  ./. ;
+        #ln -s ${nodeDependencies}/lib/node_modules ./node_modules
+        #export PATH="${nodeDependencies}/bin:$PATH"
+        #echo "${nodeDependencies}"
+        #export HOME=$(mktemp -d)
+        #mkdir $out
+        #npm run build
       installPhase = ''
-        ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-        export PATH="${nodeDependencies}/bin:$PATH"
-        echo "${nodeDependencies}"
-        export HOME=$(mktemp -d)
-        mkdir $out
-        npm run build
-        cp -r indexProduction.html js $out
+        mkdir -p $out
+        cp -r dist/* $out
       '';
     };
 in nodeModules
