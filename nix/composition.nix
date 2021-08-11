@@ -14,5 +14,4 @@ in
 import ./registry.nix {
   inherit (pkgs) fetchurl fetchgit;
   inherit nodeEnv;
-  globalBuildInputs = [pkgs.ocaml];
 }

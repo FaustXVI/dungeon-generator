@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "rescript build -with-deps",
+    "buildProd": "npm run build && parcel build index.html",
     "start": "rescript build -w",
     "clean": "rescript -clean-world",
     "server": "parcel serve index.html",

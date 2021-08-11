@@ -502,7 +502,6 @@ let
           cd ..
           ${stdenv.lib.optionalString (builtins.substring 0 1 packageName == "@") "cd .."}
 
-          echo installing
           ${prepareAndInvokeNPM { inherit packageName bypassCache reconstructLock npmFlags production; }}
 
           # Expose the executables that were installed

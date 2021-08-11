@@ -1,32 +1,20 @@
 with import ./nix/channel.nix;
 let
   dependencies = import ./nix/dependencies.nix;
-#  nodeDependencies = (pkgs.callPackage ./nix/composition.nix {inherit pkgs system nodejs;}).package;
-  #{
-
-  #      # Fix paths so we can use a cached Ninja, instead of compiling it
-  #      preInstall = ''
-  #        echo prebuild
-  #        pwd
-  #        sed -i 's:./configure.py --bootstrap:python3 ./configure.py --bootstrap:' ./scripts/install.js
-  #        fail
-  #      '';
-
-  #  };
+  nodeNix = (import ./nix/composition.nix {inherit pkgs system nodejs;});
+    nodeDependencies = nodeNix.package;
     nodeModules = stdenv.mkDerivation {
       name = "dungeon-generator";
       buildInputs = dependencies.devTools;
-      #src = nix-gitignore.gitignoreSource [] ./. ;
-      src =  ./. ;
-        #ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-        #export PATH="${nodeDependencies}/bin:$PATH"
-        #echo "${nodeDependencies}"
-        #export HOME=$(mktemp -d)
-        #mkdir $out
-        #npm run build
+      src = nix-gitignore.gitignoreSource [] ./. ;
       installPhase = ''
-        mkdir -p $out
-        cp -r dist/* $out
+          mkdir -p $out
+          cp -r ${nodeDependencies}/lib/node_modules/my-react-app/node_modules ./node_modules
+          chmod 777 -R ./node_modules
+          export PATH="./node_modules/.bin:$PATH"
+          export HOME=$(mktemp -d)
+          npm run buildProd
+          cp -r dist/* $out
       '';
     };
 in nodeModules
