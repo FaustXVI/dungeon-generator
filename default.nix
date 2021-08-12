@@ -9,8 +9,7 @@ in stdenv.mkDerivation {
   installPhase = ''
           mkdir -p $out
           cp -r ${nodeModules}/lib/node_modules ./node_modules
-          chmod 777 -R ./node_modules
-          export PATH="./node_modules/.bin:$PATH"
+          chmod 700 -R ./node_modules
           export HOME=$(mktemp -d)
           npm run buildProd
           cp -r dist/* $out
