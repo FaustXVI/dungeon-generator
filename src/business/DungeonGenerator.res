@@ -50,3 +50,11 @@ let possiblePerils = toArray(
     }),
   ),
 )
+let createPerils = ls =>
+  toArray(
+    flatten(
+      map(fromArray(perilTypes), perilType => {
+        map(fromArray(ls), level => {aPeril(perilType, level)})
+      }),
+    ),
+  )
