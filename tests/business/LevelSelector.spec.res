@@ -6,13 +6,13 @@ open LevelSelector
 
 describe("Level Selector", () => {
   test("can set a unique desired level for encounter generation", () => {
-    let levelMap = Map.fromArray([(GroupLevelMinus3, 1)], ~id=module(LevelComparator))
+    let levelMap = Map.fromArray([(GroupLevelMinus3, true)], ~id=module(LevelComparator))
     let levels = levelSelector(levelMap)
     expect(levels) |> toEqual([GroupLevelMinus3])
   })
   test("can set two desired levels for encounter generation", () => {
     let levelMap = Map.fromArray(
-      [(GroupLevelMinus3, 1), (GroupLevelPlus3, 1)],
+      [(GroupLevelMinus3, true), (GroupLevelPlus3, true)],
       ~id=module(LevelComparator),
     )
     let levels = levelSelector(levelMap)
@@ -20,7 +20,7 @@ describe("Level Selector", () => {
   })
   test("can set one of two levels for encounter generation", () => {
     let levelMap = Map.fromArray(
-      [(GroupLevelMinus3, 0), (GroupLevelPlus3, 1)],
+      [(GroupLevelMinus3, false), (GroupLevelPlus3, true)],
       ~id=module(LevelComparator),
     )
     let levels = levelSelector(levelMap)

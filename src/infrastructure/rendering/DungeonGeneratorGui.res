@@ -10,7 +10,7 @@ type state = {
   difficulty: difficulty,
   isCustom: bool,
   encounter: option<encounter>,
-  levels: Map.t<level, int, LevelComparator.identity>,
+  levels: Map.t<level, bool, LevelComparator.identity>,
 }
 
 type action =
@@ -19,7 +19,10 @@ type action =
   | SetDifficulty(difficulty)
   | Generate
 
-let generateNewEncounter = (budget, levels) => {
+let generateNewEncounter = (
+  budget: int,
+  levels: Map.t<level, bool, LevelComparator.identity>,
+): option<encounter> => {
   Some(
     generateEncounter(
       ~perils=createPerils(levelSelector(levels), perilTypes),
@@ -34,7 +37,7 @@ let initialState = {
   difficulty: Moderate,
   isCustom: false,
   encounter: None,
-  levels: Map.fromArray(Array.map(levels, l => (l, 1)), ~id=module(LevelComparator)),
+  levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
 }
 
 let reducer = (state: state, action: action): state => {
@@ -54,7 +57,7 @@ let reducer = (state: state, action: action): state => {
   | BudgetChange(budget) => {...state, budget: budget, encounter: None}
   | SwitchLevel(level) => {
       ...state,
-      levels: Map.update(state.levels, level, v => Some(1 - Option.getWithDefault(v, 1))),
+      levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
     }
   }
 }
@@ -80,7 +83,7 @@ let make = () => {
         <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
           <MaterialUi_FormControlLabel
             control={<MaterialUi_Switch
-              checked={Option.getWithDefault(Map.get(state.levels, l), 0) == 1}
+              checked={Option.getWithDefault(Map.get(state.levels, l), false)}
               onChange={onLevelSwitchChange(l)}
             />}
             label={React.string(renderLevel(l))}
