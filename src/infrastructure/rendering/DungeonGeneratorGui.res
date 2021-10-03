@@ -45,7 +45,7 @@ let initialState = {
   generatedEncounter: None,
 }
 
-let setDifficulty = (difficulty: difficulty, state: state): state => {
+let setDifficulty = (state: state, difficulty: difficulty): state => {
   switch experiencePointsForPredefinedDifficulty(difficulty) {
   | Some(budget) => {
       ...state,
@@ -57,24 +57,37 @@ let setDifficulty = (difficulty: difficulty, state: state): state => {
   | None => {...state, difficulty: difficulty, generatedEncounter: None, isCustomDifficulty: true}
   }
 }
+let generate = (state: state): state => {
+  {
+    ...state,
+    generatedEncounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
+  }
+}
+
+let budgetChange = (state: state, budget: int): state => {
+  {...state, budget: budget, generatedEncounter: None}
+}
+
+let switchLevel = (state: state, level: level): state => {
+  {
+    ...state,
+    levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
+  }
+}
+let switchPerilType = (state, perilType: perilType): state => {
+  {
+    ...state,
+    perilTypes: Map.update(state.perilTypes, perilType, v => Some(!Option.getWithDefault(v, true))),
+  }
+}
+
 let transit = (state: state, action: action): state => {
   switch action {
-  | Generate => {
-      ...state,
-      generatedEncounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
-    }
-  | SetDifficulty(difficulty) => setDifficulty(difficulty, state)
-  | BudgetChange(budget) => {...state, budget: budget, generatedEncounter: None}
-  | SwitchLevel(level) => {
-      ...state,
-      levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
-    }
-  | SwitchPerilType(perilType) => {
-      ...state,
-      perilTypes: Map.update(state.perilTypes, perilType, v => Some(
-        !Option.getWithDefault(v, true),
-      )),
-    }
+  | Generate => generate(state)
+  | SetDifficulty(difficulty) => setDifficulty(state, difficulty)
+  | BudgetChange(budget) => budgetChange(state, budget)
+  | SwitchLevel(level) => switchLevel(state, level)
+  | SwitchPerilType(perilType) => switchPerilType(state, perilType)
   }
 }
 
