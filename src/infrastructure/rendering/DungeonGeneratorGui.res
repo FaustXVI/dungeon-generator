@@ -4,6 +4,7 @@ open Peril
 open StringRenderer
 open Belt
 open LevelSelector
+open PerilTypeSelector
 
 type state = {
   budget: int,
@@ -11,21 +12,24 @@ type state = {
   isCustom: bool,
   encounter: option<encounter>,
   levels: Map.t<level, bool, LevelComparator.identity>,
+  perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
 }
 
 type action =
   | BudgetChange(int)
   | SwitchLevel(level)
+  | SwitchPerilType(perilType)
   | SetDifficulty(difficulty)
   | Generate
 
 let generateNewEncounter = (
   budget: int,
   levels: Map.t<level, bool, LevelComparator.identity>,
+  perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
 ): option<encounter> => {
   Some(
     generateEncounter(
-      ~perils=createPerils(levelSelector(levels), perilTypes),
+      ~perils=createPerils(levelSelector(levels), perilTypeSelector(perilTypes)),
       ~chooser=pickRandom,
       ~budget,
     ),
@@ -38,11 +42,15 @@ let initialState = {
   isCustom: false,
   encounter: None,
   levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
+  perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, true)), ~id=module(PerilTypeComparator)),
 }
 
 let reducer = (state: state, action: action): state => {
   switch action {
-  | Generate => {...state, encounter: generateNewEncounter(state.budget, state.levels)}
+  | Generate => {
+      ...state,
+      encounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
+    }
   | SetDifficulty(difficulty) =>
     switch experiencePointsForPredefinedDifficulty(difficulty) {
     | Some(budget) => {
@@ -58,6 +66,12 @@ let reducer = (state: state, action: action): state => {
   | SwitchLevel(level) => {
       ...state,
       levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
+    }
+  | SwitchPerilType(perilType) => {
+      ...state,
+      perilTypes: Map.update(state.perilTypes, perilType, v => Some(
+        !Option.getWithDefault(v, true),
+      )),
     }
   }
 }
@@ -77,6 +91,9 @@ let make = () => {
   let onLevelSwitchChange = (l: level, _e: ReactEvent.Form.t): unit => {
     dispatch(SwitchLevel(l))
   }
+  let onPerilTypeSwitchChange = (p: perilType, _e: ReactEvent.Form.t): unit => {
+    dispatch(SwitchPerilType(p))
+  }
   <MaterialUi_Grid container={true}>
     {React.array(
       Array.map(levels, l =>
@@ -87,6 +104,19 @@ let make = () => {
               onChange={onLevelSwitchChange(l)}
             />}
             label={React.string(renderLevel(l))}
+          />
+        </MaterialUi_Grid>
+      ),
+    )}
+    {React.array(
+      Array.map(perilTypes, p =>
+        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+          <MaterialUi_FormControlLabel
+            control={<MaterialUi_Switch
+              checked={Option.getWithDefault(Map.get(state.perilTypes, p), false)}
+              onChange={onPerilTypeSwitchChange(p)}
+            />}
+            label={React.string(renderPerilType(p))}
           />
         </MaterialUi_Grid>
       ),
