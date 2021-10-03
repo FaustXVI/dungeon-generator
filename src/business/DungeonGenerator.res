@@ -43,13 +43,13 @@ let generateEncounter = (~chooser: chooser, ~perils: array<peril>, ~budget: int)
   {perils: perils}
 }
 
-let createPerils = (selectedLevels: array<level>): array<peril> =>
+let createPerils = (selectedLevels: array<level>, selectedPerils: array<perilType>): array<peril> =>
   toArray(
     flatten(
-      map(fromArray(perilTypes), perilType => {
+      map(fromArray(selectedPerils), perilType => {
         map(fromArray(selectedLevels), level => {aPeril(perilType, level)})
       }),
     ),
   )
 
-let possiblePerils = createPerils(levels)
+let possiblePerils = createPerils(levels, perilTypes)

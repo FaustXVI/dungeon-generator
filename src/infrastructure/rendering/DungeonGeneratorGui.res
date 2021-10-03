@@ -20,7 +20,13 @@ type action =
   | Generate
 
 let generateNewEncounter = (budget, levels) => {
-  Some(generateEncounter(~perils=createPerils(levelSelector(levels)), ~chooser=pickRandom, ~budget))
+  Some(
+    generateEncounter(
+      ~perils=createPerils(levelSelector(levels), perilTypes),
+      ~chooser=pickRandom,
+      ~budget,
+    ),
+  )
 }
 
 let initialState = {
