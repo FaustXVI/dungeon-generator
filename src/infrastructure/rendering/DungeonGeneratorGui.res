@@ -9,8 +9,8 @@ open PerilTypeSelector
 type state = {
   budget: int,
   difficulty: difficulty,
-  isCustom: bool,
-  encounter: option<encounter>,
+  isCustomDifficulty: bool,
+  generatedEncounter: option<encounter>,
   levels: Map.t<level, bool, LevelComparator.identity>,
   perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
 }
@@ -39,8 +39,8 @@ let generateNewEncounter = (
 let initialState = {
   budget: Option.getWithDefault(experiencePointsForPredefinedDifficulty(Moderate), 80),
   difficulty: Moderate,
-  isCustom: false,
-  encounter: None,
+  isCustomDifficulty: false,
+  generatedEncounter: None,
   levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
   perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, true)), ~id=module(PerilTypeComparator)),
 }
@@ -49,7 +49,7 @@ let reducer = (state: state, action: action): state => {
   switch action {
   | Generate => {
       ...state,
-      encounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
+      generatedEncounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
     }
   | SetDifficulty(difficulty) =>
     switch experiencePointsForPredefinedDifficulty(difficulty) {
@@ -57,12 +57,12 @@ let reducer = (state: state, action: action): state => {
         ...state,
         difficulty: difficulty,
         budget: budget,
-        encounter: None,
-        isCustom: false,
+        generatedEncounter: None,
+        isCustomDifficulty: false,
       }
-    | None => {...state, difficulty: difficulty, encounter: None, isCustom: true}
+    | None => {...state, difficulty: difficulty, generatedEncounter: None, isCustomDifficulty: true}
     }
-  | BudgetChange(budget) => {...state, budget: budget, encounter: None}
+  | BudgetChange(budget) => {...state, budget: budget, generatedEncounter: None}
   | SwitchLevel(level) => {
       ...state,
       levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
@@ -135,7 +135,7 @@ let make = () => {
           }),
         )}
       </MaterialUi_Select>
-      {if state.isCustom {
+      {if state.isCustomDifficulty {
         <MaterialUi_TextField
           _type="number"
           value={MaterialUi_TextField.Value.int(state.budget)}
@@ -151,7 +151,7 @@ let make = () => {
       </MaterialUi_Button>
     </MaterialUi_Grid>
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
-      {switch state.encounter {
+      {switch state.generatedEncounter {
       | None => React.null
       | Some(encounter) =>
         <ul>
