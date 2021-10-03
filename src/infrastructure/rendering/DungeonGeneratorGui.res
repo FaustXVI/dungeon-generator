@@ -10,9 +10,9 @@ type state = {
   budget: int,
   difficulty: difficulty,
   isCustomDifficulty: bool,
-  generatedEncounter: option<encounter>,
   levels: Map.t<level, bool, LevelComparator.identity>,
   perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
+  generatedEncounter: option<encounter>,
 }
 
 type action =
@@ -37,31 +37,33 @@ let generateNewEncounter = (
 }
 
 let initialState = {
-  budget: Option.getWithDefault(experiencePointsForPredefinedDifficulty(Moderate), 80),
   difficulty: Moderate,
+  budget: Option.getWithDefault(experiencePointsForPredefinedDifficulty(Moderate), 80),
   isCustomDifficulty: false,
-  generatedEncounter: None,
   levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
   perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, true)), ~id=module(PerilTypeComparator)),
+  generatedEncounter: None,
 }
 
-let reducer = (state: state, action: action): state => {
+let setDifficulty = (difficulty: difficulty, state: state): state => {
+  switch experiencePointsForPredefinedDifficulty(difficulty) {
+  | Some(budget) => {
+      ...state,
+      difficulty: difficulty,
+      budget: budget,
+      generatedEncounter: None,
+      isCustomDifficulty: false,
+    }
+  | None => {...state, difficulty: difficulty, generatedEncounter: None, isCustomDifficulty: true}
+  }
+}
+let transit = (state: state, action: action): state => {
   switch action {
   | Generate => {
       ...state,
       generatedEncounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
     }
-  | SetDifficulty(difficulty) =>
-    switch experiencePointsForPredefinedDifficulty(difficulty) {
-    | Some(budget) => {
-        ...state,
-        difficulty: difficulty,
-        budget: budget,
-        generatedEncounter: None,
-        isCustomDifficulty: false,
-      }
-    | None => {...state, difficulty: difficulty, generatedEncounter: None, isCustomDifficulty: true}
-    }
+  | SetDifficulty(difficulty) => setDifficulty(difficulty, state)
   | BudgetChange(budget) => {...state, budget: budget, generatedEncounter: None}
   | SwitchLevel(level) => {
       ...state,
@@ -78,7 +80,7 @@ let reducer = (state: state, action: action): state => {
 
 @react.component
 let make = () => {
-  let (state, dispatch) = React.useReducer(reducer, initialState)
+  let (state, dispatch) = React.useReducer(transit, initialState)
   let onCustomBudgetChange = (e: ReactEvent.Form.t): unit => {
     let value = ReactEvent.Form.target(e)["value"]
     dispatch(BudgetChange(value))
