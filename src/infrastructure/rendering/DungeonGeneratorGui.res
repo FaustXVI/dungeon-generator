@@ -65,7 +65,7 @@ let make = () => {
     let difficulty = difficultyFromString(value)
     dispatch(SetDifficulty(difficulty))
   }
-  let onLevelSwitchChange = (l: level, e: ReactEvent.Form.t): unit => {
+  let onLevelSwitchChange = (l: level, _e: ReactEvent.Form.t): unit => {
     dispatch(SwitchLevel(l))
   }
   <MaterialUi_Grid container={true}>
