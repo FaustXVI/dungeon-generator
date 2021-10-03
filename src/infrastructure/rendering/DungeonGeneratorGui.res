@@ -103,26 +103,14 @@ let make = () => {
     let difficulty = difficultyFromString(value)
     dispatch(SetDifficulty(difficulty))
   }
-  let onLevelSwitchChange = (l: level, _e: ReactEvent.Form.t): unit => {
-    dispatch(SwitchLevel(l))
-  }
+
   let onPerilTypeSwitchChange = (p: perilType, _e: ReactEvent.Form.t): unit => {
     dispatch(SwitchPerilType(p))
   }
   <MaterialUi_Grid container={true}>
-    {React.array(
-      Array.map(levels, l =>
-        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
-          <MaterialUi_FormControlLabel
-            control={<MaterialUi_Switch
-              checked={Option.getWithDefault(Map.get(state.levels, l), false)}
-              onChange={onLevelSwitchChange(l)}
-            />}
-            label={React.string(renderLevel(l))}
-          />
-        </MaterialUi_Grid>
-      ),
-    )}
+    <LevelSelectorComponent
+      currentLevels={state.levels} switchLevel={l => dispatch(SwitchLevel(l))}
+    />
     {React.array(
       Array.map(perilTypes, p =>
         <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
