@@ -54,12 +54,14 @@ let switchLevel = (state: state, level: level): state => {
   {
     ...state,
     levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
+    generatedEncounter: None,
   }
 }
 let switchPerilType = (state, perilType: perilType): state => {
   {
     ...state,
     perilTypes: Map.update(state.perilTypes, perilType, v => Some(!Option.getWithDefault(v, true))),
+    generatedEncounter: None,
   }
 }
 
