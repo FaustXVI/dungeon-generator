@@ -7,8 +7,6 @@ open PerilTypeSelector
 
 type state = {
   budget: int,
-  difficulty: difficulty,
-  isCustomDifficulty: bool,
   levels: Map.t<level, bool, LevelComparator.identity>,
   perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
   generatedEncounter: option<encounter>,
@@ -18,7 +16,6 @@ type action =
   | BudgetChange(int)
   | SwitchLevel(level)
   | SwitchPerilType(perilType)
-  | SetDifficulty(difficulty)
   | Generate
 
 let generateNewEncounter = (
@@ -36,26 +33,12 @@ let generateNewEncounter = (
 }
 
 let initialState = {
-  difficulty: Moderate,
   budget: Option.getWithDefault(experiencePointsForPredefinedDifficulty(Moderate), 80),
-  isCustomDifficulty: false,
   levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
   perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, true)), ~id=module(PerilTypeComparator)),
   generatedEncounter: None,
 }
 
-let setDifficulty = (state: state, difficulty: difficulty): state => {
-  switch experiencePointsForPredefinedDifficulty(difficulty) {
-  | Some(budget) => {
-      ...state,
-      difficulty: difficulty,
-      budget: budget,
-      generatedEncounter: None,
-      isCustomDifficulty: false,
-    }
-  | None => {...state, difficulty: difficulty, generatedEncounter: None, isCustomDifficulty: true}
-  }
-}
 let generate = (state: state): state => {
   {
     ...state,
@@ -83,7 +66,6 @@ let switchPerilType = (state, perilType: perilType): state => {
 let transit = (state: state, action: action): state => {
   switch action {
   | Generate => generate(state)
-  | SetDifficulty(difficulty) => setDifficulty(state, difficulty)
   | BudgetChange(budget) => budgetChange(state, budget)
   | SwitchLevel(level) => switchLevel(state, level)
   | SwitchPerilType(perilType) => switchPerilType(state, perilType)
@@ -101,12 +83,8 @@ let make = () => {
     <PerilTypeSelectorComponent
       currentPerilTypes={state.perilTypes} switchPerilType={p => dispatch(SwitchPerilType(p))}
     />
-    <DifficultySelectorComponent
-      currentBudget={state.budget}
-      currentDifficulty={state.difficulty}
-      isCustomDifficulty={state.isCustomDifficulty}
-      difficultySelect={difficulty => dispatch(SetDifficulty(difficulty))}
-      setBudget={budget => dispatch(BudgetChange(budget))}
+    <BudgetSelectorComponent
+      currentBudget={state.budget} setBudget={budget => dispatch(BudgetChange(budget))}
     />
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
       <MaterialUi_Button variant=#Contained color={#Primary} onClick={_event => dispatch(Generate)}>
