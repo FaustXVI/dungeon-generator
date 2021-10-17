@@ -91,11 +91,6 @@ let make = () => {
         {React.string("Generate")}
       </MaterialUi_Button>
     </MaterialUi_Grid>
-    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
-      {switch state.generatedEncounter {
-      | None => React.null
-      | Some(encounter) => <EncounterDisplayComponent encounter={encounter} />
-      }}
-    </MaterialUi_Grid>
+    <EncounterDisplayComponent generatedEncounter={state.generatedEncounter} />
   </MaterialUi_Grid>
 }
