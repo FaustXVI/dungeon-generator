@@ -86,11 +86,7 @@ let make = () => {
     <BudgetSelectorComponent
       currentBudget={state.budget} setBudget={budget => dispatch(BudgetChange(budget))}
     />
-    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
-      <MaterialUi_Button variant=#Contained color={#Primary} onClick={_event => dispatch(Generate)}>
-        {React.string("Generate")}
-      </MaterialUi_Button>
-    </MaterialUi_Grid>
+    <GenerateButtonComponent generate={() => dispatch(Generate)} />
     <EncounterDisplayComponent generatedEncounter={state.generatedEncounter} />
   </MaterialUi_Grid>
 }
