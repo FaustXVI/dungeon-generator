@@ -47,30 +47,33 @@ let generate = (state: state): state => {
 }
 
 let budgetChange = (state: state, budget: int): state => {
-  {...state, budget: budget, generatedEncounter: None}
+  {...state, budget: budget}
 }
 
 let switchLevel = (state: state, level: level): state => {
   {
     ...state,
     levels: Map.update(state.levels, level, v => Some(!Option.getWithDefault(v, true))),
-    generatedEncounter: None,
   }
 }
+
 let switchPerilType = (state, perilType: perilType): state => {
   {
     ...state,
     perilTypes: Map.update(state.perilTypes, perilType, v => Some(!Option.getWithDefault(v, true))),
-    generatedEncounter: None,
   }
+}
+
+let resetGeneratedEncounter = (state: state): state => {
+  {...state, generatedEncounter: None}
 }
 
 let transit = (state: state, action: action): state => {
   switch action {
   | Generate => generate(state)
-  | BudgetChange(budget) => budgetChange(state, budget)
-  | SwitchLevel(level) => switchLevel(state, level)
-  | SwitchPerilType(perilType) => switchPerilType(state, perilType)
+  | BudgetChange(budget) => resetGeneratedEncounter(budgetChange(state, budget))
+  | SwitchLevel(level) => resetGeneratedEncounter(switchLevel(state, level))
+  | SwitchPerilType(perilType) => resetGeneratedEncounter(switchPerilType(state, perilType))
   }
 }
 
