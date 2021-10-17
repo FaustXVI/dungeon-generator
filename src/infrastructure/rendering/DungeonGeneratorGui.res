@@ -94,19 +94,7 @@ let make = () => {
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
       {switch state.generatedEncounter {
       | None => React.null
-      | Some(encounter) =>
-        <div>
-          <p>
-            {React.string("Encounter with ")}
-            {React.int(experiencePoints(encounter))}
-            {React.string(" experience points")}
-          </p>
-          <ul>
-            {StringRenderer.renderEncounter(encounter)
-            ->Array.map(s => <li key=s> {React.string(s)} </li>)
-            ->React.array}
-          </ul>
-        </div>
+      | Some(encounter) => <EncounterDisplayComponent encounter={encounter} />
       }}
     </MaterialUi_Grid>
   </MaterialUi_Grid>
