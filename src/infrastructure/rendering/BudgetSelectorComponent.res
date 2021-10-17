@@ -8,7 +8,7 @@ type state = {
 type action = SetDifficulty(difficulty)
 
 let initialState = {
-  difficulty: Moderate,
+  difficulty: Moderate, // TODO if the user gives something else than 80 at first => bug
   isCustomDifficulty: false,
 }
 
