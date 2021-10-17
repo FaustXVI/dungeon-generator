@@ -93,15 +93,6 @@ let transit = (state: state, action: action): state => {
 @react.component
 let make = () => {
   let (state, dispatch) = React.useReducer(transit, initialState)
-  let onCustomBudgetChange = (e: ReactEvent.Form.t): unit => {
-    let value = ReactEvent.Form.target(e)["value"]
-    dispatch(BudgetChange(value))
-  }
-  let onDifficultySelect = (e: ReactEvent.Form.t, _r: Js.t<'a>): unit => {
-    let value = ReactEvent.Form.target(e)["value"]
-    let difficulty = difficultyFromString(value)
-    dispatch(SetDifficulty(difficulty))
-  }
 
   <MaterialUi_Grid container={true}>
     <LevelSelectorComponent
@@ -110,30 +101,13 @@ let make = () => {
     <PerilTypeSelectorComponent
       currentPerilTypes={state.perilTypes} switchPerilType={p => dispatch(SwitchPerilType(p))}
     />
-    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
-      <MaterialUi_Select
-        value={MaterialUi_Select.Value.string(difficultyToString(state.difficulty))}
-        name="difficulty"
-        onChange=onDifficultySelect>
-        {React.array(
-          Belt.Array.map(difficulties, difficulty => {
-            <MaterialUi_MenuItem
-              value={MaterialUi_MenuItem.Value.string(difficultyToString(difficulty))}>
-              {React.string(difficultyToString(difficulty))}
-            </MaterialUi_MenuItem>
-          }),
-        )}
-      </MaterialUi_Select>
-      {if state.isCustomDifficulty {
-        <MaterialUi_TextField
-          _type="number"
-          value={MaterialUi_TextField.Value.int(state.budget)}
-          onChange=onCustomBudgetChange
-        />
-      } else {
-        React.null
-      }}
-    </MaterialUi_Grid>
+    <DifficultySelectorComponent
+      currentBudget={state.budget}
+      currentDifficulty={state.difficulty}
+      isCustomDifficulty={state.isCustomDifficulty}
+      difficultySelect={difficulty => dispatch(SetDifficulty(difficulty))}
+      setBudget={budget => dispatch(BudgetChange(budget))}
+    />
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
       <MaterialUi_Button variant=#Contained color={#Primary} onClick={_event => dispatch(Generate)}>
         {React.string("Generate")}
