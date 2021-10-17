@@ -1,7 +1,6 @@
 open DungeonGenerator
 open Encounter
 open Peril
-open StringRenderer
 open Belt
 open LevelSelector
 open PerilTypeSelector
@@ -104,26 +103,13 @@ let make = () => {
     dispatch(SetDifficulty(difficulty))
   }
 
-  let onPerilTypeSwitchChange = (p: perilType, _e: ReactEvent.Form.t): unit => {
-    dispatch(SwitchPerilType(p))
-  }
   <MaterialUi_Grid container={true}>
     <LevelSelectorComponent
       currentLevels={state.levels} switchLevel={l => dispatch(SwitchLevel(l))}
     />
-    {React.array(
-      Array.map(perilTypes, p =>
-        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
-          <MaterialUi_FormControlLabel
-            control={<MaterialUi_Switch
-              checked={Option.getWithDefault(Map.get(state.perilTypes, p), false)}
-              onChange={onPerilTypeSwitchChange(p)}
-            />}
-            label={React.string(renderPerilType(p))}
-          />
-        </MaterialUi_Grid>
-      ),
-    )}
+    <PerilTypeSelectorComponent
+      currentPerilTypes={state.perilTypes} switchPerilType={p => dispatch(SwitchPerilType(p))}
+    />
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
       <MaterialUi_Select
         value={MaterialUi_Select.Value.string(difficultyToString(state.difficulty))}
