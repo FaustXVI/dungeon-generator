@@ -4,18 +4,17 @@ open Peril
 open Belt
 open LevelSelector
 open PerilTypeSelector
+open BudgetSelectorComponent
 
 type state = {
-  budget: int,
-  difficulty: difficulty,
+  budget: budget,
   levels: Map.t<level, bool, LevelComparator.identity>,
   perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
   generatedEncounter: option<encounter>,
 }
 
 type action =
-  | BudgetChange(int)
-  | DifficultyChange(difficulty)
+  | BudgetChange(budget)
   | SwitchLevel(level)
   | SwitchPerilType(perilType)
   | Generate
@@ -35,8 +34,7 @@ let generateNewEncounter = (
 }
 
 let initialState = {
-  difficulty: Moderate,
-  budget: Option.getWithDefault(experiencePointsForPredefinedDifficulty(Moderate), 80),
+  budget: initialBudget,
   levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
   perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, true)), ~id=module(PerilTypeComparator)),
   generatedEncounter: None,
@@ -45,23 +43,16 @@ let initialState = {
 let generate = (state: state): state => {
   {
     ...state,
-    generatedEncounter: generateNewEncounter(state.budget, state.levels, state.perilTypes),
-  }
-}
-
-let budgetChange = (state: state, budget: int): state => {
-  {...state, budget: budget}
-}
-
-let difficultyChange = (state: state, difficulty: difficulty): state => {
-  {
-    ...state,
-    difficulty: difficulty,
-    budget: Option.getWithDefault(
-      experiencePointsForPredefinedDifficulty(difficulty),
-      state.budget,
+    generatedEncounter: generateNewEncounter(
+      getBudgetValue(state.budget),
+      state.levels,
+      state.perilTypes,
     ),
   }
+}
+
+let budgetChange = (state: state, budget: budget): state => {
+  {...state, budget: budget}
 }
 
 let switchLevel = (state: state, level: level): state => {
@@ -86,7 +77,6 @@ let transit = (state: state, action: action): state => {
   switch action {
   | Generate => generate(state)
   | BudgetChange(budget) => resetGeneratedEncounter(budgetChange(state, budget))
-  | DifficultyChange(difficulty) => resetGeneratedEncounter(difficultyChange(state, difficulty))
   | SwitchLevel(level) => resetGeneratedEncounter(switchLevel(state, level))
   | SwitchPerilType(perilType) => resetGeneratedEncounter(switchPerilType(state, perilType))
   }
@@ -104,10 +94,7 @@ let make = () => {
       currentPerilTypes={state.perilTypes} switchPerilType={p => dispatch(SwitchPerilType(p))}
     />
     <BudgetSelectorComponent
-      currentBudget={state.budget}
-      setBudget={budget => dispatch(BudgetChange(budget))}
-      currentDifficulty={state.difficulty}
-      setDifficulty={difficulty => dispatch(DifficultyChange(difficulty))}
+      currentBudget={state.budget} setBudget={budget => dispatch(BudgetChange(budget))}
     />
     <GenerateButtonComponent generate={() => dispatch(Generate)} />
     <EncounterDisplayComponent generatedEncounter={state.generatedEncounter} />
