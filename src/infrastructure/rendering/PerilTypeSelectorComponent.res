@@ -11,7 +11,7 @@ let make = (
   <MaterialUi_Grid container={true}>
     {React.array(
       Array.map(perilTypes, p =>
-        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12} key={renderPerilType(p)}>
           <MaterialUi_FormControlLabel
             control={<MaterialUi_Switch
               checked={Option.getWithDefault(Map.get(currentPerilTypes, p), false)}
