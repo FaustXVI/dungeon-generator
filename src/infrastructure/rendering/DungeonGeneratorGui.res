@@ -16,7 +16,7 @@ type state = {
 type action =
   | BudgetChange(budget)
   | SwitchLevel(level)
-  | SwitchPerilType(perilType)
+  | SetPerilType(perilType, int)
   | Generate
 
 let generateNewEncounter = (
@@ -62,10 +62,10 @@ let switchLevel = (state: state, level: level): state => {
   }
 }
 
-let switchPerilType = (state, perilType: perilType): state => {
+let setPerilType = (state, perilType: perilType, weight: int): state => {
   {
     ...state,
-    perilTypes: Map.update(state.perilTypes, perilType, v => Some(1 - Option.getWithDefault(v, 1))),
+    perilTypes: Map.update(state.perilTypes, perilType, v => Some(weight)),
   }
 }
 
@@ -78,7 +78,8 @@ let transit = (state: state, action: action): state => {
   | Generate => generate(state)
   | BudgetChange(budget) => resetGeneratedEncounter(budgetChange(state, budget))
   | SwitchLevel(level) => resetGeneratedEncounter(switchLevel(state, level))
-  | SwitchPerilType(perilType) => resetGeneratedEncounter(switchPerilType(state, perilType))
+  | SetPerilType(perilType, weight) =>
+    resetGeneratedEncounter(setPerilType(state, perilType, weight))
   }
 }
 
@@ -91,7 +92,7 @@ let make = () => {
       currentLevels={state.levels} switchLevel={l => dispatch(SwitchLevel(l))}
     />
     <PerilTypeSelectorComponent
-      currentPerilTypes={state.perilTypes} switchPerilType={p => dispatch(SwitchPerilType(p))}
+      currentPerilTypes={state.perilTypes} setPerilType={(p, w) => dispatch(SetPerilType(p, w))}
     />
     <BudgetSelectorComponent
       currentBudget={state.budget} setBudget={budget => dispatch(BudgetChange(budget))}
