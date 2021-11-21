@@ -5,7 +5,7 @@ open PerilTypeSelector
 
 @react.component
 let make = (
-  ~currentPerilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
+  ~currentPerilTypes: Map.t<perilType, int, PerilTypeComparator.identity>,
   ~switchPerilType: perilType => unit,
 ) => {
   <MaterialUi_Grid container={true}>
@@ -14,7 +14,7 @@ let make = (
         <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12} key={renderPerilType(p)}>
           <MaterialUi_FormControlLabel
             control={<MaterialUi_Switch
-              checked={Option.getWithDefault(Map.get(currentPerilTypes, p), false)}
+              checked={Option.getWithDefault(Map.get(currentPerilTypes, p), 0) == 1}
               onChange={_ => switchPerilType(p)}
             />}
             label={React.string(renderPerilType(p))}

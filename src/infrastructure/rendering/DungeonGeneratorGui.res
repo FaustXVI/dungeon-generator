@@ -9,7 +9,7 @@ open BudgetSelectorComponent
 type state = {
   budget: budget,
   levels: Map.t<level, bool, LevelComparator.identity>,
-  perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
+  perilTypes: Map.t<perilType, int, PerilTypeComparator.identity>,
   generatedEncounter: option<encounter>,
 }
 
@@ -22,7 +22,7 @@ type action =
 let generateNewEncounter = (
   budget: int,
   levels: Map.t<level, bool, LevelComparator.identity>,
-  perilTypes: Map.t<perilType, bool, PerilTypeComparator.identity>,
+  perilTypes: Map.t<perilType, int, PerilTypeComparator.identity>,
 ): option<encounter> => {
   Some(
     generateEncounter(
@@ -36,7 +36,7 @@ let generateNewEncounter = (
 let initialState = {
   budget: initialBudget,
   levels: Map.fromArray(Array.map(levels, l => (l, true)), ~id=module(LevelComparator)),
-  perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, true)), ~id=module(PerilTypeComparator)),
+  perilTypes: Map.fromArray(Array.map(perilTypes, l => (l, 1)), ~id=module(PerilTypeComparator)),
   generatedEncounter: None,
 }
 
@@ -65,7 +65,7 @@ let switchLevel = (state: state, level: level): state => {
 let switchPerilType = (state, perilType: perilType): state => {
   {
     ...state,
-    perilTypes: Map.update(state.perilTypes, perilType, v => Some(!Option.getWithDefault(v, true))),
+    perilTypes: Map.update(state.perilTypes, perilType, v => Some(1 - Option.getWithDefault(v, 1))),
   }
 }
 
