@@ -6,14 +6,16 @@ module PerilTypeComparator = Id.MakeComparable({
   let cmp = (a: perilType, b: perilType) => compare(a, b)
 })
 
+let rec repeat = (perilType: perilType, n: int): array<perilType> => {
+  if n == 0 {
+    []
+  } else {
+    Array.concat([perilType], repeat(perilType, n - 1))
+  }
+}
+
 let perilTypeSelector = (perilTypeMap: Map.t<perilType, int, PerilTypeComparator.identity>): array<
   perilType,
 > => {
-  Map.reduce(perilTypeMap, [], (acc, key, value) =>
-    if value == 1 {
-      Array.concat(acc, [key])
-    } else {
-      acc
-    }
-  )
+  Map.reduce(perilTypeMap, [], (acc, key, value) => Array.concat(acc, repeat(key, value)))
 }

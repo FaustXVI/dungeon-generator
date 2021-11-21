@@ -20,7 +20,7 @@ let make = (
                 )}
                 onChange={(_, n) => setPerilType(p, n)}
                 min={MaterialUi_Types.Number.int(0)}
-                max={MaterialUi_Types.Number.int(1)}
+                max={MaterialUi_Types.Number.int(10)}
                 marks={MaterialUi_Slider.Marks.bool(true)}
                 valueLabelDisplay={#On}
               />
