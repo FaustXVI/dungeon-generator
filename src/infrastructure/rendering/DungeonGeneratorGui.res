@@ -65,7 +65,7 @@ let switchLevel = (state: state, level: level): state => {
 let setPerilType = (state, perilType: perilType, weight: int): state => {
   {
     ...state,
-    perilTypes: Map.update(state.perilTypes, perilType, v => Some(weight)),
+    perilTypes: Map.update(state.perilTypes, perilType, _ => Some(weight)),
   }
 }
 

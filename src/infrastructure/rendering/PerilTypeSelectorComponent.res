@@ -11,15 +11,22 @@ let make = (
   <MaterialUi_Grid container={true}>
     {React.array(
       Array.map(perilTypes, p =>
-        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12} key={renderPerilType(p)}>
-          <MaterialUi_FormControlLabel
-            control={<MaterialUi_Switch
-              checked={Option.getWithDefault(Map.get(currentPerilTypes, p), 0) == 1}
-              onChange={_ =>
-                setPerilType(p, 1 - Option.getWithDefault(Map.get(currentPerilTypes, p), 1))}
-            />}
-            label={React.string(renderPerilType(p))}
-          />
+        <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+          <MaterialUi_Grid container={true} xs={MaterialUi.Grid.Xs._12} spacing={#V3}>
+            <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._3}>
+              <MaterialUi_Slider
+                value={MaterialUi_Slider.Value.int(
+                  Option.getWithDefault(Map.get(currentPerilTypes, p), 0),
+                )}
+                onChange={(_, n) => setPerilType(p, n)}
+                min={MaterialUi_Types.Number.int(0)}
+                max={MaterialUi_Types.Number.int(1)}
+                marks={MaterialUi_Slider.Marks.bool(true)}
+                valueLabelDisplay={#On}
+              />
+            </MaterialUi_Grid>
+            <MaterialUi_Grid item={true}> {React.string(renderPerilType(p))} </MaterialUi_Grid>
+          </MaterialUi_Grid>
         </MaterialUi_Grid>
       ),
     )}
