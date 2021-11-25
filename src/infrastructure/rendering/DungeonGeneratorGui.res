@@ -88,16 +88,26 @@ let make = () => {
   let (state, dispatch) = React.useReducer(transit, initialState)
 
   <MaterialUi_Grid container={true}>
-    <LevelSelectorComponent
-      currentLevels={state.levels} switchLevel={l => dispatch(SwitchLevel(l))}
-    />
-    <PerilTypeSelectorComponent
-      currentPerilTypes={state.perilTypes} setPerilType={(p, w) => dispatch(SetPerilType(p, w))}
-    />
-    <BudgetSelectorComponent
-      currentBudget={state.budget} setBudget={budget => dispatch(BudgetChange(budget))}
-    />
-    <GenerateButtonComponent generate={() => dispatch(Generate)} />
-    <EncounterDisplayComponent generatedEncounter={state.generatedEncounter} />
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <LevelSelectorComponent
+        currentLevels={state.levels} switchLevel={l => dispatch(SwitchLevel(l))}
+      />
+    </MaterialUi_Grid>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <PerilTypeSelectorComponent
+        currentPerilTypes={state.perilTypes} setPerilType={(p, w) => dispatch(SetPerilType(p, w))}
+      />
+    </MaterialUi_Grid>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <BudgetSelectorComponent
+        currentBudget={state.budget} setBudget={budget => dispatch(BudgetChange(budget))}
+      />
+    </MaterialUi_Grid>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <GenerateButtonComponent generate={() => dispatch(Generate)} />
+    </MaterialUi_Grid>
+    <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
+      <EncounterDisplayComponent generatedEncounter={state.generatedEncounter} />
+    </MaterialUi_Grid>
   </MaterialUi_Grid>
 }
