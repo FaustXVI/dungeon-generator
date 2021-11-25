@@ -57,14 +57,14 @@ let budgetChange = (state: state, budget: budget): state => {
 let setLevel = (state: state, level: level, weight: int): state => {
   {
     ...state,
-    levels: Map.update(state.levels, level, _ => Some(weight)),
+    levels: Map.set(state.levels, level, weight),
   }
 }
 
 let setPerilType = (state, perilType: perilType, weight: int): state => {
   {
     ...state,
-    perilTypes: Map.update(state.perilTypes, perilType, _ => Some(weight)),
+    perilTypes: Map.set(state.perilTypes, perilType, weight),
   }
 }
 
