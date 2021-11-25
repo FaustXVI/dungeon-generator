@@ -6,9 +6,9 @@ module LevelComparator = Id.MakeComparable({
   let cmp = (a: level, b: level) => compare(a, b)
 })
 
-let levelSelector = (levelMap: Map.t<level, bool, LevelComparator.identity>): array<level> => {
+let levelSelector = (levelMap: Map.t<level, int, LevelComparator.identity>): array<level> => {
   Map.reduce(levelMap, [], (acc, key, value) =>
-    if value {
+    if value == 1 {
       Array.concat(acc, [key])
     } else {
       acc
