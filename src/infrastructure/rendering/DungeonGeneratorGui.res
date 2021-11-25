@@ -14,7 +14,7 @@ type state = {
 
 type action =
   | BudgetChange(budget)
-  | SwitchLevel(level)
+  | SetLevel(level, int)
   | SetPerilType(perilType, int)
   | Generate
 
@@ -54,10 +54,10 @@ let budgetChange = (state: state, budget: budget): state => {
   {...state, budget: budget}
 }
 
-let switchLevel = (state: state, level: level): state => {
+let setLevel = (state: state, level: level, weight: int): state => {
   {
     ...state,
-    levels: Map.update(state.levels, level, v => Some(1 - Option.getWithDefault(v, 1))),
+    levels: Map.update(state.levels, level, _ => Some(weight)),
   }
 }
 
@@ -76,7 +76,7 @@ let transit = (state: state, action: action): state => {
   switch action {
   | Generate => generate(state)
   | BudgetChange(budget) => resetGeneratedEncounter(budgetChange(state, budget))
-  | SwitchLevel(level) => resetGeneratedEncounter(switchLevel(state, level))
+  | SetLevel(level, weight) => resetGeneratedEncounter(setLevel(state, level, weight))
   | SetPerilType(perilType, weight) =>
     resetGeneratedEncounter(setPerilType(state, perilType, weight))
   }
@@ -89,7 +89,7 @@ let make = () => {
   <MaterialUi_Grid container={true}>
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
       <LevelSelectorComponent
-        currentLevels={state.levels} switchLevel={l => dispatch(SwitchLevel(l))}
+        currentLevels={state.levels} setLevel={(l, w) => dispatch(SetLevel(l, w))}
       />
     </MaterialUi_Grid>
     <MaterialUi_Grid item={true} xs={MaterialUi.Grid.Xs._12}>
