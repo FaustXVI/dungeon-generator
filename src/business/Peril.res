@@ -11,6 +11,11 @@ type level =
   | GroupLevelPlus3
   | GroupLevelPlus4
 
+module LevelComparator = Id.MakeComparable({
+  type t = level
+  let cmp = (a: level, b: level) => compare(a, b)
+})
+
 let levels = [
   GroupLevelMinus4,
   GroupLevelMinus3,
@@ -27,6 +32,11 @@ type perilType =
   | Creature
   | SimpleDanger
   | ComplexDanger
+
+module PerilTypeComparator = Id.MakeComparable({
+  type t = perilType
+  let cmp = (a: perilType, b: perilType) => compare(a, b)
+})
 
 let perilTypes = [Creature, SimpleDanger, ComplexDanger]
 

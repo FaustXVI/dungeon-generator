@@ -1,7 +1,6 @@
 open Peril
 open Belt
 open StringRenderer
-open PerilTypeSelector
 
 @react.component
 let make = (

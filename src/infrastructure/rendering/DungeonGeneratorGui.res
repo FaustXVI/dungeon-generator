@@ -2,9 +2,8 @@ open DungeonGenerator
 open Encounter
 open Peril
 open Belt
-open LevelSelector
-open PerilTypeSelector
 open BudgetSelectorComponent
+open Selector
 
 type state = {
   budget: budget,
@@ -26,7 +25,7 @@ let generateNewEncounter = (
 ): option<encounter> => {
   Some(
     generateEncounter(
-      ~perils=createPerils(levelSelector(levels), perilTypeSelector(perilTypes)),
+      ~perils=createPerils(selector(levels), selector(perilTypes)),
       ~chooser=pickRandom,
       ~budget,
     ),

@@ -1,6 +1,5 @@
 open Peril
 open Belt
-open LevelSelector
 open StringRenderer
 
 @react.component
